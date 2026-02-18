@@ -1,6 +1,8 @@
 import sys
 from pathlib import Path
 
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+
 import pytest
 from fastapi.testclient import TestClient
 from sqlalchemy import create_engine
@@ -11,8 +13,6 @@ from app.core.security import get_password_hash
 from app.main import app
 from app.api.deps import get_db
 from app.models import Base, Project, ProjectRole, User, UserProject
-
-sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 
 @pytest.fixture()
@@ -50,7 +50,10 @@ def client() -> TestClient:
 
     app.dependency_overrides[get_db] = override_get_db
 
-    with TestClient(app) as test_client:
+    test_client = TestClient(app)
+    try:
         yield test_client
+    finally:
+        test_client.close()
 
     app.dependency_overrides.clear()

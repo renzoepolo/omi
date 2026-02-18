@@ -1,7 +1,7 @@
 import sqlite3
 from pathlib import Path
 
-import app
+import bulk_csv_app as app
 
 
 def setup_function() -> None:
