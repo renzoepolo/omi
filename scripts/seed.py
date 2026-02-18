@@ -14,10 +14,10 @@ def run() -> None:
             admin = User(email="admin@omi.local", hashed_password=get_password_hash("admin123"))
             db.add(admin)
 
-        ana = db.scalar(select(User).where(User.email == "ana@omi.local"))
-        if not ana:
-            ana = User(email="ana@omi.local", hashed_password=get_password_hash("ana123"))
-            db.add(ana)
+        renzo = db.scalar(select(User).where(User.email == "renzo@omi.local"))
+        if not renzo:
+            renzo = User(email="renzo@omi.local", hashed_password=get_password_hash("renzo123"))
+            db.add(renzo)
 
         p1 = db.scalar(select(Project).where(Project.name == "Proyecto A"))
         if not p1:
@@ -34,7 +34,7 @@ def run() -> None:
         links = {
             (admin.id, p1.id): ProjectRole.SUPER_ADMIN,
             (admin.id, p2.id): ProjectRole.PROJECT_ADMIN,
-            (ana.id, p1.id): ProjectRole.EDITOR,
+            (renzo.id, p1.id): ProjectRole.EDITOR,
         }
 
         for (user_id, project_id), role in links.items():

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
 export default function LoginForm({ onLogin }) {
-  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -11,7 +11,7 @@ export default function LoginForm({ onLogin }) {
     setError('');
     setLoading(true);
     try {
-      await onLogin(username, password);
+      await onLogin(email, password);
     } catch (err) {
       setError(err.message);
     } finally {
@@ -25,8 +25,13 @@ export default function LoginForm({ onLogin }) {
         <h1>OMI GIS</h1>
         <p>Accede con JWT para gestionar puntos georreferenciados.</p>
         <label>
-          Usuario
-          <input value={username} onChange={(e) => setUsername(e.target.value)} required />
+          Correo
+          <input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
         </label>
         <label>
           Contraseña
@@ -41,7 +46,7 @@ export default function LoginForm({ onLogin }) {
         <button type="submit" disabled={loading}>
           {loading ? 'Ingresando...' : 'Iniciar sesión'}
         </button>
-        <small>Demo local: admin / admin123</small>
+        <small>Demo local: admin@omi.local / admin123</small>
       </form>
     </div>
   );

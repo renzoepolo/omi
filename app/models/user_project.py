@@ -21,7 +21,12 @@ class UserProject(Base):
     user_id: Mapped[int] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
     project_id: Mapped[int] = mapped_column(ForeignKey("projects.id", ondelete="CASCADE"), nullable=False)
     role: Mapped[ProjectRole] = mapped_column(
-        Enum(ProjectRole, name="project_role", native_enum=False),
+        Enum(
+            ProjectRole,
+            name="project_role",
+            native_enum=False,
+            values_callable=lambda enum_cls: [item.value for item in enum_cls],
+        ),
         nullable=False,
         default=ProjectRole.VIEWER,
     )

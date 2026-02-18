@@ -1,10 +1,10 @@
 const API_URL = import.meta.env.VITE_API_URL || '';
 
-const DEMO_USER = { username: 'admin', password: 'admin123', token: 'demo-jwt-token' };
+const DEMO_USER = { email: 'admin@omi.local', password: 'admin123', token: 'demo-jwt-token' };
 
-export async function loginRequest(username, password) {
+export async function loginRequest(email, password) {
   if (!API_URL) {
-    if (username === DEMO_USER.username && password === DEMO_USER.password) {
+    if (email === DEMO_USER.email && password === DEMO_USER.password) {
       return { token: DEMO_USER.token, name: 'Administrador Demo' };
     }
     throw new Error('Credenciales inválidas');
@@ -13,14 +13,15 @@ export async function loginRequest(username, password) {
   const response = await fetch(`${API_URL}/auth/login`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ username, password }),
+    body: JSON.stringify({ email, password }),
   });
 
   if (!response.ok) {
     throw new Error('No se pudo iniciar sesión');
   }
 
-  return response.json();
+  const payload = await response.json();
+  return { token: payload.access_token, tokenType: payload.token_type };
 }
 
 export async function getProjects(token) {
@@ -40,35 +41,13 @@ export async function getProjects(token) {
 }
 
 export async function getPoints(token, projectId) {
-  if (!API_URL) {
-    const key = `points:${projectId}`;
-    const raw = localStorage.getItem(key);
-    if (raw) return JSON.parse(raw);
-    return [];
-  }
-
-  const response = await fetch(`${API_URL}/projects/${projectId}/points`, {
-    headers: { Authorization: `Bearer ${token}` },
-  });
-  if (!response.ok) throw new Error('No se pudieron cargar puntos');
-  return response.json();
+  const key = `points:${projectId}`;
+  const raw = localStorage.getItem(key);
+  if (raw) return JSON.parse(raw);
+  return [];
 }
 
 export async function savePoints(token, projectId, points) {
-  if (!API_URL) {
-    localStorage.setItem(`points:${projectId}`, JSON.stringify(points));
-    return { ok: true };
-  }
-
-  const response = await fetch(`${API_URL}/projects/${projectId}/points`, {
-    method: 'PUT',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`,
-    },
-    body: JSON.stringify(points),
-  });
-
-  if (!response.ok) throw new Error('No se pudieron guardar cambios');
-  return response.json();
+  localStorage.setItem(`points:${projectId}`, JSON.stringify(points));
+  return { ok: true };
 }

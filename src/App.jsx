@@ -44,8 +44,8 @@ export default function App() {
     });
   }, [token, projectId]);
 
-  async function handleLogin(username, password) {
-    const payload = await loginRequest(username, password);
+  async function handleLogin(email, password) {
+    const payload = await loginRequest(email, password);
     setToken(payload.token);
     localStorage.setItem('token', payload.token);
   }

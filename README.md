@@ -86,7 +86,7 @@ uvicorn app.main:app --reload
 ## Seed inicial
 
 `python -m scripts.seed` crea:
-- Usuarios: `admin@omi.local`, `ana@omi.local`
+- Usuarios: `admin@omi.local`, `renzo@omi.local`
 - Proyectos: `Proyecto A`, `Proyecto B`
 - Membresías con roles en `user_projects`
 
@@ -161,6 +161,23 @@ npm install
 npm run dev
 npm run build
 ```
+
+## Despliegue Docker Total (Frontend + Backend + DB)
+
+El repositorio incluye `docker-compose.full.yml` para levantar todo el stack de app:
+
+```bash
+docker compose -f docker-compose.full.yml up -d --build
+```
+
+Acceso:
+- Frontend: `http://localhost:8500`
+- Backend docs: `http://localhost:8500/api/docs`
+- Health backend: `http://localhost:8500/api/health`
+
+Credenciales seed:
+- `admin@omi.local` / `admin123`
+- `renzo@omi.local` / `renzo123`
 
 ## Multi-tenant RLS
 
