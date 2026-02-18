@@ -1,4 +1,4 @@
-from pydantic import BaseModel, EmailStr, model_validator
+from pydantic import BaseModel, model_validator
 
 
 class Token(BaseModel):
@@ -7,14 +7,16 @@ class Token(BaseModel):
 
 
 class LoginRequest(BaseModel):
-    email: EmailStr | None = None
-    username: EmailStr | None = None
+    email: str | None = None
+    username: str | None = None
     password: str
 
     @model_validator(mode="after")
     def normalize_identity(self) -> "LoginRequest":
         # Backward compatibility: some clients still send "username".
-        self.email = self.email or self.username
+        email = (self.email or "").strip()
+        username = (self.username or "").strip()
+        self.email = email or username
         if not self.email:
             raise ValueError("Either email or username is required")
         return self
