@@ -161,3 +161,17 @@ npm install
 npm run dev
 npm run build
 ```
+
+## Multi-tenant RLS
+
+También se incluye una migración SQL para habilitar Row Level Security por `project_id`:
+
+- `scripts/apply_rls.sh`
+- `db/migrations/20260218_enable_multi_tenant_rls.sql`
+- `db/migrations/20260218_enable_multi_tenant_rls.down.sql`
+
+Aplicación:
+
+```bash
+ENABLE_RLS=true DATABASE_URL=postgres://user:pass@host:5432/dbname ./scripts/apply_rls.sh
+```
