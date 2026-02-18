@@ -11,8 +11,19 @@ function buildPoint(coords) {
     id: crypto.randomUUID(),
     name: 'Punto nuevo',
     description: '',
-    status: 'nuevo',
+    status: 'cargado',
     coordinates: coords,
+    property_type: 'urbano_baldio',
+    price: '',
+    currency: '',
+    valuation_date: '',
+    surface_total: '',
+    surface_unit: 'm2',
+    value_origin_code: '',
+    location: {},
+    building: {},
+    rural: {},
+    persisted: false,
   };
 }
 
@@ -108,7 +119,8 @@ export default function App() {
     if (!projectId) return;
     setSaving(true);
     try {
-      await savePoints(token, projectId, points);
+      const updated = await savePoints(token, projectId, points);
+      setPoints(updated);
     } finally {
       setSaving(false);
     }
@@ -117,10 +129,10 @@ export default function App() {
   async function saveDraft() {
     if (!draftPoint) return;
     if (panelMode === 'create') {
-      setPoints((current) => [...current, draftPoint]);
+      setPoints((current) => [...current, { ...draftPoint, persisted: false }]);
       setSelectedId(draftPoint.id);
     } else if (panelMode === 'edit') {
-      updatePoint(draftPoint);
+      updatePoint({ ...draftPoint, persisted: true });
       setSelectedId(draftPoint.id);
     }
     setDraftPoint(null);

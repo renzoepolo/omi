@@ -3,10 +3,12 @@ import maplibregl from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
 
 const STATUS_COLOR = {
-  nuevo: '#2f80ed',
-  en_proceso: '#f2994a',
-  resuelto: '#27ae60',
-  descartado: '#eb5757',
+  cargado: '#2f80ed',
+  posicionado: '#49a5ff',
+  revision: '#f2994a',
+  completado: '#27ae60',
+  outlier: '#eb5757',
+  eliminado: '#777777',
 };
 
 const BASEMAP_STYLE = {
@@ -111,14 +113,18 @@ export default function MapView({
           'circle-color': [
             'match',
             ['get', 'status'],
-            'nuevo',
-            STATUS_COLOR.nuevo,
-            'en_proceso',
-            STATUS_COLOR.en_proceso,
-            'resuelto',
-            STATUS_COLOR.resuelto,
-            'descartado',
-            STATUS_COLOR.descartado,
+            'cargado',
+            STATUS_COLOR.cargado,
+            'posicionado',
+            STATUS_COLOR.posicionado,
+            'revision',
+            STATUS_COLOR.revision,
+            'completado',
+            STATUS_COLOR.completado,
+            'outlier',
+            STATUS_COLOR.outlier,
+            'eliminado',
+            STATUS_COLOR.eliminado,
             '#6f7f94',
           ],
           'circle-stroke-color': '#ffffff',

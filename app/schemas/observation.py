@@ -153,6 +153,7 @@ class ObservationRead(BaseModel):
     unit_land_value: Decimal | None = None
     surface_total: Decimal | None = None
     surface_unit: str
+    value_origin_code: str | None = None
     external_uuid: uuid.UUID | None = None
     legacy_fid: int | None = None
     extras: dict = Field(default_factory=dict)
