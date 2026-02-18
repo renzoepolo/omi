@@ -7,7 +7,14 @@ from app.models.catalogs import (
     CatalogPropertyType,
     CatalogValueOrigin,
 )
-from app.models.observation import Observation, ObservationStatus, ObservationStatusHistory
+from app.models.observation import (
+    Observation,
+    ObservationBuilding,
+    ObservationLocation,
+    ObservationRural,
+    ObservationStatus,
+    ObservationStatusHistory,
+)
 from app.models.project import Project
 from app.models.user import User
 from app.models.user_project import ProjectRole, UserProject
@@ -27,4 +34,7 @@ __all__ = [
     "Observation",
     "ObservationStatus",
     "ObservationStatusHistory",
+    "ObservationLocation",
+    "ObservationBuilding",
+    "ObservationRural",
 ]

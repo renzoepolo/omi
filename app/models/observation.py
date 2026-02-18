@@ -77,6 +77,24 @@ class Observation(Base):
         back_populates="observation",
         cascade="all, delete-orphan",
     )
+    location = relationship(
+        "ObservationLocation",
+        back_populates="observation",
+        uselist=False,
+        cascade="all, delete-orphan",
+    )
+    building = relationship(
+        "ObservationBuilding",
+        back_populates="observation",
+        uselist=False,
+        cascade="all, delete-orphan",
+    )
+    rural = relationship(
+        "ObservationRural",
+        back_populates="observation",
+        uselist=False,
+        cascade="all, delete-orphan",
+    )
 
 
 class ObservationStatusHistory(Base):
@@ -109,3 +127,78 @@ class ObservationStatusHistory(Base):
     changed_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False, default=datetime.utcnow)
 
     observation = relationship("Observation", back_populates="status_history")
+
+
+class ObservationLocation(Base):
+    __tablename__ = "observation_location"
+
+    observation_id: Mapped[uuid.UUID] = mapped_column(
+        Uuid,
+        ForeignKey("observations.id", ondelete="CASCADE"),
+        primary_key=True,
+    )
+    padron: Mapped[str | None] = mapped_column(String(255), nullable=True)
+    neighborhood_type_code: Mapped[str | None] = mapped_column(String(64), nullable=True)
+    shape_type_code: Mapped[str | None] = mapped_column(String(64), nullable=True)
+    block_position_code: Mapped[str | None] = mapped_column(String(64), nullable=True)
+    legal_status_id: Mapped[int | None] = mapped_column(
+        ForeignKey("catalog_legal_status.id", ondelete="SET NULL"),
+        nullable=True,
+    )
+    affectation_code: Mapped[str | None] = mapped_column(String(64), nullable=True)
+
+    observation = relationship("Observation", back_populates="location")
+
+
+class ObservationBuilding(Base):
+    __tablename__ = "observation_building"
+
+    observation_id: Mapped[uuid.UUID] = mapped_column(
+        Uuid,
+        ForeignKey("observations.id", ondelete="CASCADE"),
+        primary_key=True,
+    )
+    built_surface_total: Mapped[float | None] = mapped_column(Numeric(18, 2), nullable=True)
+    warehouse_surface: Mapped[float | None] = mapped_column(Numeric(18, 2), nullable=True)
+    front_meters: Mapped[float | None] = mapped_column(Numeric(18, 2), nullable=True)
+    conservation_state_id: Mapped[int | None] = mapped_column(
+        ForeignKey("catalog_conservation_state.id", ondelete="SET NULL"),
+        nullable=True,
+    )
+    destination_id: Mapped[int | None] = mapped_column(
+        ForeignKey("catalog_destination.id", ondelete="SET NULL"),
+        nullable=True,
+    )
+    construction_category_code: Mapped[str | None] = mapped_column(String(64), nullable=True)
+    bedrooms_count: Mapped[int | None] = mapped_column(nullable=True)
+    bathrooms_count: Mapped[int | None] = mapped_column(nullable=True)
+    garage_count: Mapped[int | None] = mapped_column(nullable=True)
+    floors_count: Mapped[int | None] = mapped_column(nullable=True)
+    has_pool: Mapped[bool | None] = mapped_column(Boolean, nullable=True)
+    antiquity_year: Mapped[int | None] = mapped_column(nullable=True)
+
+    observation = relationship("Observation", back_populates="building")
+
+
+class ObservationRural(Base):
+    __tablename__ = "observation_rural"
+
+    observation_id: Mapped[uuid.UUID] = mapped_column(
+        Uuid,
+        ForeignKey("observations.id", ondelete="CASCADE"),
+        primary_key=True,
+    )
+    main_use_code: Mapped[str | None] = mapped_column(String(64), nullable=True)
+    sugarcane_surface: Mapped[float | None] = mapped_column(Numeric(18, 2), nullable=True)
+    citrus_surface: Mapped[float | None] = mapped_column(Numeric(18, 2), nullable=True)
+    grains_surface: Mapped[float | None] = mapped_column(Numeric(18, 2), nullable=True)
+    forest_surface: Mapped[float | None] = mapped_column(Numeric(18, 2), nullable=True)
+    other_crops_surface: Mapped[float | None] = mapped_column(Numeric(18, 2), nullable=True)
+    has_irrigation: Mapped[bool | None] = mapped_column(Boolean, nullable=True)
+    irrigation_type_code: Mapped[str | None] = mapped_column(String(64), nullable=True)
+    irrigated_surface: Mapped[float | None] = mapped_column(Numeric(18, 2), nullable=True)
+    irrigation_concession_type_code: Mapped[str | None] = mapped_column(String(64), nullable=True)
+    has_extraordinary_improvements: Mapped[bool | None] = mapped_column(Boolean, nullable=True)
+    has_rural_improvements: Mapped[bool | None] = mapped_column(Boolean, nullable=True)
+
+    observation = relationship("Observation", back_populates="rural")

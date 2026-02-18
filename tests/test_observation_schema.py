@@ -39,3 +39,21 @@ def test_observation_create_rejects_unknown_property_type() -> None:
             property_type="ph",
             status="cargado",
         )
+
+
+def test_observation_create_rejects_rural_payload_for_urban_type() -> None:
+    with pytest.raises(ValidationError):
+        ObservationCreate(
+            project_id=1,
+            property_type="urbano_baldio",
+            rural={"main_use_code": "agricola"},
+        )
+
+
+def test_observation_create_rejects_building_payload_for_rural_type() -> None:
+    with pytest.raises(ValidationError):
+        ObservationCreate(
+            project_id=1,
+            property_type="rural",
+            building={"bedrooms_count": 2},
+        )
