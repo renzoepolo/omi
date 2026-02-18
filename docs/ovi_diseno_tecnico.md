@@ -296,3 +296,80 @@ Ventajas:
 4. Definir validaciones de transición de estado + RLS por `project_id`.
 5. Diseñar migrador desde estructura legacy.
 
+---
+
+## 8) Alineación explícita con ODS `Diccionario de datos_Tabla OVI_v2.ods`
+
+Se verificó el ODS real y su estructura de 54 campos. Para implementación del OVI se adopta:
+
+### 8.1 Campos excluidos por alcance/requerimiento
+
+- `ESTADO_CARGA` (reemplazado por workflow `status`).
+- `CALIDAD_UBIC` (equivale a precisión operacional en diccionario legacy).
+- Coordenadas legacy separadas (`longitud`, `latitud`) cuando existan en fuente intermedia.
+  - La ubicación final se modela como `Point EPSG:4326` en geometría.
+
+### 8.2 Mapeo canónico de estado
+
+Se mantiene exclusivamente:
+
+- `cargado`
+- `posicionado`
+- `revision`
+- `completado`
+- `outlier`
+- `eliminado`
+
+El estado de ciclo de vida vive en `observations.status` y su trazabilidad en `observation_status_history`.
+
+### 8.3 Regla económica obligatoria
+
+- `price` (mapea principalmente a `VALOR_TOTAL`) debe ser numérico.
+- `currency` (`MONEDA`) es obligatoria cuando `price` está presente.
+
+### 8.4 `tipo_inmueble` normalizado para UI/negocio
+
+Aunque el ODS legacy codifica variantes adicionales (incluyendo `PH`), la capa funcional inicial queda en:
+
+- `urbano_baldio`
+- `urbano_edificado`
+- `rural`
+
+`PH` se trata en compatibilidad de migración como urbano edificado salvo configuración distinta.
+
+### 8.5 Criterio columnas fijas vs JSONB (implementación)
+
+Columnas fijas (filtro, índice, reglas):
+- tenant/proyecto, identificadores externos, estado, tipo inmueble.
+- precio total, moneda, fecha valor, origen valor.
+- superficie total y unidad.
+- geometría, soft delete, auditoría temporal/usuario.
+
+`JSONB extras` (atributos heterogéneos, baja frecuencia o expansión):
+- atributos rurales detallados (`SUP_*`, `RIEGO`, `TIPO_RIEGO`, etc.) en fase inicial.
+- atributos constructivos de baja cobertura (`N_COCHERA`, `SUP_GALPON`, etc.) hasta consolidación.
+- metadatos de captura/fuente no estables por proyecto.
+
+Regla de promoción de `extras` a columna:
+- Si un atributo aparece en >20% de registros de al menos 2 proyectos y entra en filtros/reportes recurrentes.
+
+### 8.6 Catálogos mínimos a crear desde inicio
+
+- `tipo_inmueble`
+- `moneda`
+- `origen_valor`
+- `situacion_juridica`
+- `destino`
+- `estado_conservacion`
+- `tipo_barrio`
+- `afectacion`
+
+Todos con patrón `code`, `label`, `is_active`, `sort_order`.
+
+### 8.7 Impacto en UI
+
+Formulario y panel de consulta deben:
+- respetar `tipo_inmueble` para mostrar/ocultar campos.
+- soportar `price + moneda` como par obligatorio.
+- operar sobre `status` del workflow (no sobre `estado_carga`).
+- renderizar ubicación desde geometría `Point EPSG:4326`.
