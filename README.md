@@ -107,3 +107,24 @@ Incluye tests de:
 - login
 - acceso permitido al proyecto asignado
 - denegación entre proyectos
+
+## Stack GeoServer + PostGIS (Docker)
+
+Esta rama también incorpora un stack de despliegue con Docker:
+
+- `docker-compose.yml`
+- `backend/` (servicio API para integración con GeoServer)
+- `db/init.sql`
+- `nginx/nginx.conf`
+
+Servicios del stack:
+- `backend`
+- `db` (PostgreSQL + PostGIS)
+- `geoserver`
+- `nginx`
+
+Levantar stack:
+
+```bash
+docker compose up -d --build
+```
