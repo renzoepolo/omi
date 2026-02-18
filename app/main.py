@@ -12,6 +12,8 @@ PROJECT_ID_EXEMPT_PATHS = {
     "/openapi.json",
     "/redoc",
     "/health",
+    "/projects",
+    "/projects/",
 }
 
 
