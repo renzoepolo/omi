@@ -141,3 +141,23 @@ Reglas incluidas:
 - Filtro por estado (`statuses`)
 - Filtro por rango de fecha (`start_date`, `end_date`)
 - Seguridad multi-tenant obligatoria (`tenant_id`)
+
+## Frontend React + MapLibre
+
+El repositorio también incluye una variante frontend en `src/` con Vite + React + MapLibre.
+
+Variables opcionales de frontend:
+
+```bash
+VITE_API_URL=http://localhost:8000/api
+VITE_GEOSERVER_WMS=http://localhost:8080/geoserver/wms
+VITE_GEOSERVER_LAYER=workspace:properties
+```
+
+Comandos:
+
+```bash
+npm install
+npm run dev
+npm run build
+```
