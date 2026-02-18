@@ -1,8 +1,9 @@
 import { useEffect, useMemo, useState } from 'react';
+import AppHeader from './components/AppHeader';
+import FAB from './components/FAB';
 import LoginForm from './components/LoginForm';
 import MapView from './components/MapView';
-import ProjectSelector from './components/ProjectSelector';
-import PointPanel from './components/PointPanel';
+import RightPanel from './components/RightPanel';
 import { getPoints, getProjects, loginRequest, savePoints } from './lib/api';
 
 function buildPoint(coords) {
@@ -23,16 +24,30 @@ export default function App() {
   const [selectedId, setSelectedId] = useState(null);
   const [saving, setSaving] = useState(false);
 
+  const [fabOpen, setFabOpen] = useState(false);
+  const [editEnabled, setEditEnabled] = useState(false);
+  const [tool, setTool] = useState('query');
+  const [panelOpen, setPanelOpen] = useState(false);
+  const [panelMode, setPanelMode] = useState('query');
+  const [draftPoint, setDraftPoint] = useState(null);
+
   const selectedProject = useMemo(
-    () => projects.find((project) => project.id === projectId) || projects[0],
+    () => projects.find((project) => String(project.id) === String(projectId)) || projects[0],
     [projects, projectId],
+  );
+
+  const selectedPoint = useMemo(
+    () => points.find((point) => String(point.id) === String(selectedId)),
+    [points, selectedId],
   );
 
   useEffect(() => {
     if (!token) return;
     getProjects(token).then((projectList) => {
       setProjects(projectList);
-      if (projectList.length > 0) setProjectId((prev) => prev || projectList[0].id);
+      if (projectList.length > 0) {
+        setProjectId((prev) => prev || projectList[0].id);
+      }
     });
   }, [token]);
 
@@ -41,6 +56,9 @@ export default function App() {
     getPoints(token, projectId).then((items) => {
       setPoints(items);
       setSelectedId(items[0]?.id ?? null);
+      setDraftPoint(null);
+      setPanelOpen(false);
+      setPanelMode('query');
     });
   }, [token, projectId]);
 
@@ -50,13 +68,40 @@ export default function App() {
     localStorage.setItem('token', payload.token);
   }
 
-  function updatePoint(updated) {
-    setPoints((current) => current.map((point) => (point.id === updated.id ? updated : point)));
+  function handleLogout() {
+    localStorage.removeItem('token');
+    setToken(null);
+    setProjects([]);
+    setProjectId(null);
+    setPoints([]);
+    setSelectedId(null);
+    setPanelOpen(false);
+    setDraftPoint(null);
+    setTool('query');
+    setEditEnabled(false);
   }
 
-  function deletePoint(id) {
-    setPoints((current) => current.filter((point) => point.id !== id));
-    setSelectedId(null);
+  function handleSelectTool(nextTool) {
+    setTool(nextTool);
+    if (nextTool === 'query') {
+      setDraftPoint(null);
+      setPanelMode('query');
+    }
+  }
+
+  function handleToggleEditEnabled(enabled) {
+    setEditEnabled(enabled);
+    if (!enabled) {
+      setTool('query');
+      setDraftPoint(null);
+      setPanelMode('query');
+    }
+  }
+
+  function updatePoint(updated) {
+    setPoints((current) =>
+      current.map((point) => (String(point.id) === String(updated.id) ? updated : point)),
+    );
   }
 
   async function persist() {
@@ -69,6 +114,28 @@ export default function App() {
     }
   }
 
+  async function saveDraft() {
+    if (!draftPoint) return;
+    if (panelMode === 'create') {
+      setPoints((current) => [...current, draftPoint]);
+      setSelectedId(draftPoint.id);
+    } else if (panelMode === 'edit') {
+      updatePoint(draftPoint);
+      setSelectedId(draftPoint.id);
+    }
+    setDraftPoint(null);
+    setPanelMode('query');
+    setTool('query');
+    await persist();
+  }
+
+  function cancelDraft() {
+    setDraftPoint(null);
+    setPanelMode('query');
+    setTool('query');
+    setPanelOpen(Boolean(selectedPoint));
+  }
+
   if (!token) {
     return <LoginForm onLogin={handleLogin} />;
   }
@@ -78,45 +145,79 @@ export default function App() {
   }
 
   return (
-    <main className="layout">
-      <header className="topbar card">
-        <ProjectSelector projects={projects} selectedId={selectedProject.id} onChange={setProjectId} />
-        <button
-          className="ghost"
-          onClick={() => {
-            localStorage.removeItem('token');
-            setToken(null);
+    <main className="app-shell">
+      <AppHeader
+        projects={projects}
+        selectedProjectId={selectedProject.id}
+        onProjectChange={setProjectId}
+        onLogout={handleLogout}
+      />
+
+      <div className="viewer-area">
+        <MapView
+          project={selectedProject}
+          points={points}
+          selectedId={selectedId}
+          draftPoint={draftPoint}
+          mode={tool}
+          onMapQuery={() => {
+            setPanelMode('query');
+            setPanelOpen(true);
           }}
-        >
-          Cerrar sesión
-        </button>
-      </header>
+          onPointQuery={(id) => {
+            setSelectedId(id);
+            setPanelMode('query');
+            setPanelOpen(true);
+          }}
+          onCreatePointFromMap={(coords) => {
+            if (tool !== 'create') return;
+            setDraftPoint(buildPoint(coords));
+            setPanelMode('create');
+            setPanelOpen(true);
+          }}
+          onPickPointToEdit={(id) => {
+            if (tool !== 'edit') return;
+            const point = points.find((item) => String(item.id) === String(id));
+            if (!point) return;
+            setSelectedId(id);
+            setDraftPoint({ ...point });
+            setPanelMode('edit');
+            setPanelOpen(true);
+          }}
+          onMovePoint={(id, coords) => {
+            if (tool !== 'edit') return;
+            if (draftPoint && String(draftPoint.id) === String(id)) {
+              setDraftPoint((current) => ({ ...current, coordinates: coords }));
+              return;
+            }
+            updatePoint({
+              ...(points.find((item) => String(item.id) === String(id)) || buildPoint(coords)),
+              id,
+              coordinates: coords,
+            });
+          }}
+        />
 
-      <MapView
-        project={selectedProject}
-        points={points}
-        selectedId={selectedId}
-        onSelectPoint={setSelectedId}
-        onCreatePoint={(coords) => {
-          const point = buildPoint(coords);
-          setPoints((current) => [...current, point]);
-          setSelectedId(point.id);
-        }}
-        onMovePoint={(id, coords) => {
-          setPoints((current) =>
-            current.map((point) => (point.id === id ? { ...point, coordinates: coords } : point)),
-          );
-          setSelectedId(id);
-        }}
-      />
+        <RightPanel
+          open={panelOpen}
+          mode={panelMode}
+          point={panelMode === 'query' ? selectedPoint : draftPoint}
+          onClose={() => setPanelOpen(false)}
+          onDraftChange={setDraftPoint}
+          onSaveDraft={saveDraft}
+          onCancelDraft={cancelDraft}
+          saving={saving}
+        />
 
-      <PointPanel
-        selectedPoint={points.find((point) => point.id === selectedId)}
-        onUpdate={updatePoint}
-        onDelete={deletePoint}
-        onSave={persist}
-        saving={saving}
-      />
+        <FAB
+          open={fabOpen}
+          onToggleOpen={() => setFabOpen((current) => !current)}
+          editEnabled={editEnabled}
+          onToggleEditEnabled={handleToggleEditEnabled}
+          activeTool={tool}
+          onSelectTool={handleSelectTool}
+        />
+      </div>
     </main>
   );
 }
