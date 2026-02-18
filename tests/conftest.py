@@ -1,3 +1,6 @@
+import sys
+from pathlib import Path
+
 import pytest
 from fastapi.testclient import TestClient
 from sqlalchemy import create_engine
@@ -8,6 +11,8 @@ from app.core.security import get_password_hash
 from app.main import app
 from app.api.deps import get_db
 from app.models import Base, Project, ProjectRole, User, UserProject
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 
 @pytest.fixture()
