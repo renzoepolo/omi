@@ -128,3 +128,16 @@ Levantar stack:
 ```bash
 docker compose up -d --build
 ```
+
+## Exportación de proyectos
+
+Incluye exportación con:
+
+- CSV plano (valores codificados)
+- CSV interpretado (valores descriptivos)
+- GeoPackage (geometría + atributos)
+
+Reglas incluidas:
+- Filtro por estado (`statuses`)
+- Filtro por rango de fecha (`start_date`, `end_date`)
+- Seguridad multi-tenant obligatoria (`tenant_id`)
