@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 
-export default function UserMenu({ onLogout }) {
+export default function UserMenu({ canAccessAdmin, onGoAdmin, onLogout }) {
   const [open, setOpen] = useState(false);
   const containerRef = useRef(null);
 
@@ -23,12 +23,17 @@ export default function UserMenu({ onLogout }) {
 
       {open && (
         <div className="user-dropdown card">
-          <button type="button" onClick={() => setOpen(false)}>
-            Administracion
-          </button>
-          <button type="button" onClick={() => setOpen(false)}>
-            Mi perfil
-          </button>
+          {canAccessAdmin && (
+            <button
+              type="button"
+              onClick={() => {
+                setOpen(false);
+                onGoAdmin();
+              }}
+            >
+              Administracion
+            </button>
+          )}
           <button
             type="button"
             className="danger"

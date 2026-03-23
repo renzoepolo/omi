@@ -8,9 +8,13 @@ RUN npm install
 COPY index.html ./index.html
 COPY vite.config.js ./vite.config.js
 COPY src ./src
+COPY shared ./shared
 
 ARG VITE_API_URL=/api
 ENV VITE_API_URL=${VITE_API_URL}
+
+ARG VITE_GEOSERVER_URL=/geoserver
+ENV VITE_GEOSERVER_URL=${VITE_GEOSERVER_URL}
 
 RUN npm run build
 

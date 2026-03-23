@@ -5,7 +5,7 @@ from sqlalchemy.orm import Session
 
 from app.core.database import get_db
 from app.core.security import decode_token
-from app.models import User, UserProject
+from app.models import ProjectRole, User, UserProject
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/login")
 
@@ -47,5 +47,16 @@ def get_project_membership(
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="You do not have access to this project",
+        )
+    return membership
+
+
+def get_admin_membership(
+    membership: UserProject = Depends(get_project_membership),
+) -> UserProject:
+    if membership.role not in {ProjectRole.SUPER_ADMIN, ProjectRole.PROJECT_ADMIN}:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Admin access required",
         )
     return membership

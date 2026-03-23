@@ -6,8 +6,9 @@ from sqlalchemy.pool import StaticPool
 
 from app.api.deps import get_project_membership
 from app.api.routes.auth import login
+from app.api.routes.projects import list_projects
 from app.core.security import decode_token, get_password_hash
-from app.models import Base, Project, ProjectRole, User, UserProject
+from app.models import Base, Layer, LayerType, Project, ProjectLayer, ProjectRole, User, UserProject
 from app.schemas.auth import LoginRequest
 
 
@@ -33,6 +34,27 @@ def db() -> Session:
                 UserProject(user_id=user.id, project_id=p1.id, role=ProjectRole.EDITOR),
                 UserProject(user_id=other.id, project_id=p2.id, role=ProjectRole.VIEWER),
             ]
+        )
+        session.flush()
+        layer = Layer(
+            name="Layer test",
+            geoserver_workspace="omi",
+            geoserver_layer_name="parcelas",
+            style_name="default",
+            type=LayerType.WMS,
+            default_visible=True,
+            z_index=10,
+        )
+        session.add(layer)
+        session.flush()
+        session.add(
+            ProjectLayer(
+                project_id=p1.id,
+                layer_id=layer.id,
+                available_override=False,
+                visible_override=True,
+                z_index_override=20,
+            )
         )
         session.commit()
         yield session
@@ -63,3 +85,15 @@ def test_project_access_denied_between_projects(db: Session) -> None:
     with pytest.raises(HTTPException) as exc:
         get_project_membership(db=db, current_user=user, project_id=2)
     assert exc.value.status_code == 403
+
+
+def test_projects_response_includes_layers_metadata_key(db: Session) -> None:
+    user = db.scalar(select(User).where(User.email == "user@test.com"))
+    assert user is not None
+
+    projects = list_projects(db=db, current_user=user)
+    assert len(projects) == 1
+    assert "default_base_layers" in projects[0]
+    assert projects[0]["default_base_layers"]
+    assert "available_override" in projects[0]["default_base_layers"][0]
+    assert projects[0]["default_base_layers"][0]["available_override"] is False

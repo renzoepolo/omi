@@ -1,0 +1,57 @@
+{
+  "TIPO_INMUEBLE": [
+    { "code": 0, "label": "Urbano Baldio" },
+    { "code": 1, "label": "Urbano Edificado" },
+    { "code": 2, "label": "PH" },
+    { "code": 3, "label": "Rural" }
+  ],
+  "ORIGEN_VALOR": [
+    { "code": 0, "label": "Oferta" },
+    { "code": 1, "label": "Venta" },
+    { "code": 2, "label": "Escrituracion" },
+    { "code": 3, "label": "Tasacion" },
+    { "code": 4, "label": "Valor de Referencia" },
+    { "code": 5, "label": "Hipoteca" },
+    { "code": 6, "label": "Remate" },
+    { "code": 7, "label": "Alquiler" }
+  ],
+  "UNI_SUP": [
+    { "code": 0, "label": "Metros" },
+    { "code": 1, "label": "Hectareas" }
+  ],
+  "MONEDA": [
+    { "code": 0, "label": "Pesos" },
+    { "code": 1, "label": "Dolares" }
+  ],
+  "AFECTACION": [
+    { "code": 0, "label": "Total" },
+    { "code": 1, "label": "Parcial" },
+    { "code": 2, "label": "Mayor" }
+  ],
+  "FORMA": [
+    { "code": 0, "label": "Regular" },
+    { "code": 1, "label": "Irregular" }
+  ],
+  "UBIC_CUADRA": [
+    { "code": 0, "label": "Medial" },
+    { "code": 1, "label": "Esquina" },
+    { "code": 2, "label": "Interno" },
+    { "code": 3, "label": "Salida a 2 o mas calles" }
+  ],
+  "TIPO_BARRIO": [
+    { "code": 0, "label": "Abierto" },
+    { "code": 1, "label": "Cerrado" },
+    { "code": 2, "label": "Country" },
+    { "code": 3, "label": "Informal" }
+  ],
+  "SIT_JURIDICA": [
+    { "code": 0, "label": "Escritura" },
+    { "code": 1, "label": "Posesion" },
+    { "code": 2, "label": "Preventa" }
+  ],
+  "PROCEDENCIA": [
+    { "code": 0, "label": "Relevamiento de Campo" },
+    { "code": 1, "label": "Sitio Web" },
+    { "code": 2, "label": "Agente de Mercado" }
+  ]
+}

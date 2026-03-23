@@ -11,6 +11,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY alembic ./alembic
 COPY alembic.ini .
 COPY app ./app
+COPY shared ./shared
 COPY scripts ./scripts
 COPY docker/backend-entrypoint.sh /usr/local/bin/backend-entrypoint.sh
 RUN chmod +x /usr/local/bin/backend-entrypoint.sh

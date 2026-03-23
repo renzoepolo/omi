@@ -1,7 +1,14 @@
 import ProjectSelector from './ProjectSelector';
 import UserMenu from './UserMenu';
 
-export default function AppHeader({ projects, selectedProjectId, onProjectChange, onLogout }) {
+export default function AppHeader({
+  projects,
+  selectedProjectId,
+  onProjectChange,
+  canAccessAdmin,
+  onGoAdmin,
+  onLogout,
+}) {
   return (
     <header className="app-header">
       <div className="brand-block">
@@ -13,7 +20,7 @@ export default function AppHeader({ projects, selectedProjectId, onProjectChange
 
       <ProjectSelector projects={projects} selectedId={selectedProjectId} onChange={onProjectChange} />
 
-      <UserMenu onLogout={onLogout} />
+      <UserMenu canAccessAdmin={canAccessAdmin} onGoAdmin={onGoAdmin} onLogout={onLogout} />
     </header>
   );
 }

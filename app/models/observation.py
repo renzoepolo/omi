@@ -95,6 +95,12 @@ class Observation(Base):
         uselist=False,
         cascade="all, delete-orphan",
     )
+    ovi_urbano_baldio = relationship(
+        "ObservationOviUrbanoBaldio",
+        back_populates="observation",
+        uselist=False,
+        cascade="all, delete-orphan",
+    )
 
 
 class ObservationStatusHistory(Base):
@@ -202,3 +208,34 @@ class ObservationRural(Base):
     has_rural_improvements: Mapped[bool | None] = mapped_column(Boolean, nullable=True)
 
     observation = relationship("Observation", back_populates="rural")
+
+
+class ObservationOviUrbanoBaldio(Base):
+    __tablename__ = "observation_ovi_urbano_baldio"
+
+    observation_id: Mapped[uuid.UUID] = mapped_column(
+        Uuid,
+        ForeignKey("observations.id", ondelete="CASCADE"),
+        primary_key=True,
+    )
+    tipo_inmueble: Mapped[int] = mapped_column(nullable=False)
+    origen_valor: Mapped[int] = mapped_column(nullable=False)
+    superficie: Mapped[int] = mapped_column(nullable=False)
+    uni_sup: Mapped[int] = mapped_column(nullable=False)
+    moneda: Mapped[int] = mapped_column(nullable=False)
+    valor_total: Mapped[float] = mapped_column(Numeric(18, 2), nullable=False)
+    nomenclatura: Mapped[str] = mapped_column(String(255), nullable=False)
+    afectacion: Mapped[int] = mapped_column(nullable=False)
+    frente: Mapped[int] = mapped_column(nullable=False)
+    forma: Mapped[int] = mapped_column(nullable=False)
+    ubic_cuadra: Mapped[int] = mapped_column(nullable=False)
+    tipo_barrio: Mapped[int] = mapped_column(nullable=False)
+    sit_juridica: Mapped[int] = mapped_column(nullable=False)
+    fecha_valor: Mapped[date] = mapped_column(Date, nullable=False)
+    procedencia: Mapped[int] = mapped_column(nullable=False)
+    telefono: Mapped[str | None] = mapped_column(String(255), nullable=True)
+    foto_fachada: Mapped[str | None] = mapped_column(String(1024), nullable=True)
+    foto_cartel: Mapped[str | None] = mapped_column(String(1024), nullable=True)
+    link: Mapped[str | None] = mapped_column(String(1024), nullable=True)
+
+    observation = relationship("Observation", back_populates="ovi_urbano_baldio")

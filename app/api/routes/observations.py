@@ -17,6 +17,7 @@ from app.models import (
     Observation,
     ObservationBuilding,
     ObservationLocation,
+    ObservationOviUrbanoBaldio,
     ObservationRural,
     ObservationStatus,
     ObservationStatusHistory,
@@ -25,6 +26,13 @@ from app.models import (
 from app.schemas.observation import ObservationCreate, ObservationRead, ObservationUpdate
 
 router = APIRouter(prefix="/projects/{project_id}/observations", tags=["observations"])
+
+
+def _sanitize_extras(payload_extras: dict | None) -> dict:
+    extras = dict(payload_extras or {})
+    extras.pop("name", None)
+    extras.pop("description", None)
+    return extras
 
 
 def _require_project_scope(project_id: int, membership: UserProject) -> None:
@@ -145,6 +153,36 @@ def _upsert_rural(
     observation.rural = rural
 
 
+def _upsert_ovi_urbano_baldio(
+    observation: Observation,
+    payload_ovi,
+) -> None:
+    if payload_ovi is None:
+        observation.ovi_urbano_baldio = None
+        return
+    ovi = observation.ovi_urbano_baldio or ObservationOviUrbanoBaldio(observation_id=observation.id)
+    ovi.tipo_inmueble = payload_ovi.TIPO_INMUEBLE
+    ovi.origen_valor = payload_ovi.ORIGEN_VALOR
+    ovi.superficie = payload_ovi.SUPERFICIE
+    ovi.uni_sup = payload_ovi.UNI_SUP
+    ovi.moneda = payload_ovi.MONEDA
+    ovi.valor_total = payload_ovi.VALOR_TOTAL
+    ovi.nomenclatura = payload_ovi.NOMENCLATURA
+    ovi.afectacion = payload_ovi.AFECTACION
+    ovi.frente = payload_ovi.FRENTE
+    ovi.forma = payload_ovi.FORMA
+    ovi.ubic_cuadra = payload_ovi.UBIC_CUADRA
+    ovi.tipo_barrio = payload_ovi.TIPO_BARRIO
+    ovi.sit_juridica = payload_ovi.SIT_JURIDICA
+    ovi.fecha_valor = payload_ovi.FECHA_VALOR
+    ovi.procedencia = payload_ovi.PROCEDENCIA
+    ovi.telefono = payload_ovi.TELEFONO
+    ovi.foto_fachada = payload_ovi.FOTO_FACHADA
+    ovi.foto_cartel = payload_ovi.FOTO_CARTEL
+    ovi.link = payload_ovi.LINK
+    observation.ovi_urbano_baldio = ovi
+
+
 def _serialize_observation(db: Session, observation: Observation) -> ObservationRead:
     property_type_code = _catalog_code_by_id(db, CatalogPropertyType, observation.property_type_id)
     currency_code = _catalog_code_by_id(db, CatalogCurrency, observation.currency_id)
@@ -197,6 +235,30 @@ def _serialize_observation(db: Session, observation: Observation) -> Observation
             "has_rural_improvements": observation.rural.has_rural_improvements,
         }
 
+    ovi_urbano_baldio = None
+    if observation.ovi_urbano_baldio:
+        ovi_urbano_baldio = {
+            "TIPO_INMUEBLE": observation.ovi_urbano_baldio.tipo_inmueble,
+            "ORIGEN_VALOR": observation.ovi_urbano_baldio.origen_valor,
+            "SUPERFICIE": observation.ovi_urbano_baldio.superficie,
+            "UNI_SUP": observation.ovi_urbano_baldio.uni_sup,
+            "MONEDA": observation.ovi_urbano_baldio.moneda,
+            "VALOR_TOTAL": observation.ovi_urbano_baldio.valor_total,
+            "NOMENCLATURA": observation.ovi_urbano_baldio.nomenclatura,
+            "AFECTACION": observation.ovi_urbano_baldio.afectacion,
+            "FRENTE": observation.ovi_urbano_baldio.frente,
+            "FORMA": observation.ovi_urbano_baldio.forma,
+            "UBIC_CUADRA": observation.ovi_urbano_baldio.ubic_cuadra,
+            "TIPO_BARRIO": observation.ovi_urbano_baldio.tipo_barrio,
+            "SIT_JURIDICA": observation.ovi_urbano_baldio.sit_juridica,
+            "FECHA_VALOR": observation.ovi_urbano_baldio.fecha_valor,
+            "PROCEDENCIA": observation.ovi_urbano_baldio.procedencia,
+            "TELEFONO": observation.ovi_urbano_baldio.telefono,
+            "FOTO_FACHADA": observation.ovi_urbano_baldio.foto_fachada,
+            "FOTO_CARTEL": observation.ovi_urbano_baldio.foto_cartel,
+            "LINK": observation.ovi_urbano_baldio.link,
+        }
+
     return ObservationRead(
         id=observation.id,
         project_id=observation.project_id,
@@ -215,6 +277,7 @@ def _serialize_observation(db: Session, observation: Observation) -> Observation
         location=location,
         building=building,
         rural=rural,
+        ovi_urbano_baldio=ovi_urbano_baldio,
         created_at=observation.created_at,
         updated_at=observation.updated_at,
     )
@@ -246,6 +309,12 @@ def create_observation(
     if payload.project_id != project_id:
         raise HTTPException(status_code=400, detail="project_id body and path must match")
 
+    ovi = payload.ovi_urbano_baldio
+    mapped_price = ovi.VALOR_TOTAL if ovi else payload.price
+    mapped_currency = None
+    if ovi:
+        mapped_currency = "ARS" if ovi.MONEDA == 0 else "USD"
+
     observation = Observation(
         project_id=project_id,
         external_uuid=payload.external_uuid,
@@ -253,18 +322,21 @@ def create_observation(
         property_type_id=_catalog_id_by_code(db, CatalogPropertyType, payload.property_type.value, required=True),
         value_origin_id=_catalog_id_by_code(db, CatalogValueOrigin, payload.value_origin_code, required=False),
         currency_id=_catalog_id_by_code(
-            db, CatalogCurrency, payload.currency.value if payload.currency else None, required=False
+            db,
+            CatalogCurrency,
+            mapped_currency or (payload.currency.value if payload.currency else None),
+            required=False,
         ),
-        market_value_total=payload.price,
+        market_value_total=mapped_price,
         unit_land_value=payload.unit_land_value,
-        valuation_date=payload.valuation_date,
-        surface_total=payload.surface_total,
-        surface_unit=payload.surface_unit,
+        valuation_date=ovi.FECHA_VALOR if ovi else payload.valuation_date,
+        surface_total=ovi.SUPERFICIE if ovi else payload.surface_total,
+        surface_unit="m2" if ovi else payload.surface_unit,
         status=ObservationStatus(payload.status.value),
         is_outlier=payload.status.value == ObservationStatus.OUTLIER.value,
         created_by=membership.user_id,
         updated_by=membership.user_id,
-        extras=payload.extras,
+        extras=_sanitize_extras(payload.extras),
     )
     db.add(observation)
     db.flush()
@@ -272,6 +344,7 @@ def create_observation(
     _upsert_location(db, observation, payload.location)
     _upsert_building(db, observation, payload.building)
     _upsert_rural(observation, payload.rural)
+    _upsert_ovi_urbano_baldio(observation, payload.ovi_urbano_baldio)
 
     db.add(
         ObservationStatusHistory(
@@ -337,7 +410,7 @@ def update_observation(
         if observation.status == ObservationStatus.ELIMINADO:
             observation.deleted_at = datetime.utcnow()
     if "extras" in data and payload.extras is not None:
-        observation.extras = payload.extras
+        observation.extras = _sanitize_extras(payload.extras)
 
     if "location" in data:
         _upsert_location(db, observation, payload.location)
@@ -345,6 +418,19 @@ def update_observation(
         _upsert_building(db, observation, payload.building)
     if "rural" in data:
         _upsert_rural(observation, payload.rural)
+    if "ovi_urbano_baldio" in data:
+        _upsert_ovi_urbano_baldio(observation, payload.ovi_urbano_baldio)
+        if payload.ovi_urbano_baldio is not None:
+            observation.market_value_total = payload.ovi_urbano_baldio.VALOR_TOTAL
+            observation.valuation_date = payload.ovi_urbano_baldio.FECHA_VALOR
+            observation.surface_total = payload.ovi_urbano_baldio.SUPERFICIE
+            observation.surface_unit = "m2"
+            observation.currency_id = _catalog_id_by_code(
+                db,
+                CatalogCurrency,
+                "ARS" if payload.ovi_urbano_baldio.MONEDA == 0 else "USD",
+                required=False,
+            )
 
     observation.updated_by = membership.user_id
 

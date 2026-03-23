@@ -1,4 +1,5 @@
 from app.models.base import Base
+from app.models.admin import AdminAuditLog, FormFieldDefinition, Layer, LayerType, ProjectLayer
 from app.models.catalogs import (
     CatalogConservationState,
     CatalogCurrency,
@@ -11,6 +12,7 @@ from app.models.observation import (
     Observation,
     ObservationBuilding,
     ObservationLocation,
+    ObservationOviUrbanoBaldio,
     ObservationRural,
     ObservationStatus,
     ObservationStatusHistory,
@@ -37,4 +39,10 @@ __all__ = [
     "ObservationLocation",
     "ObservationBuilding",
     "ObservationRural",
+    "ObservationOviUrbanoBaldio",
+    "Layer",
+    "LayerType",
+    "ProjectLayer",
+    "FormFieldDefinition",
+    "AdminAuditLog",
 ]

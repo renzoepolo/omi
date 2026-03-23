@@ -1,4 +1,5 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import AdminPage from './components/AdminPage';
 import AppHeader from './components/AppHeader';
 import FAB from './components/FAB';
 import LoginForm from './components/LoginForm';
@@ -9,8 +10,6 @@ import { getPoints, getProjects, loginRequest, savePoints } from './lib/api';
 function buildPoint(coords) {
   return {
     id: crypto.randomUUID(),
-    name: 'Punto nuevo',
-    description: '',
     status: 'cargado',
     coordinates: coords,
     property_type: 'urbano_baldio',
@@ -20,6 +19,27 @@ function buildPoint(coords) {
     surface_total: '',
     surface_unit: 'm2',
     value_origin_code: '',
+    ovi_urbano_baldio: {
+      TIPO_INMUEBLE: 0,
+      ORIGEN_VALOR: '',
+      SUPERFICIE: '',
+      UNI_SUP: 0,
+      MONEDA: '',
+      VALOR_TOTAL: '',
+      NOMENCLATURA: '',
+      AFECTACION: '',
+      FRENTE: '',
+      FORMA: '',
+      UBIC_CUADRA: '',
+      TIPO_BARRIO: '',
+      SIT_JURIDICA: '',
+      FECHA_VALOR: '',
+      PROCEDENCIA: '',
+      TELEFONO: '',
+      FOTO_FACHADA: '',
+      FOTO_CARTEL: '',
+      LINK: '',
+    },
     location: {},
     building: {},
     rural: {},
@@ -28,6 +48,9 @@ function buildPoint(coords) {
 }
 
 export default function App() {
+  const [route, setRoute] = useState(() =>
+    window.location.pathname.startsWith('/admin') ? '/admin' : '/',
+  );
   const [token, setToken] = useState(() => localStorage.getItem('token'));
   const [projects, setProjects] = useState([]);
   const [projectId, setProjectId] = useState(null);
@@ -35,7 +58,6 @@ export default function App() {
   const [selectedId, setSelectedId] = useState(null);
   const [saving, setSaving] = useState(false);
 
-  const [fabOpen, setFabOpen] = useState(false);
   const [editEnabled, setEditEnabled] = useState(false);
   const [tool, setTool] = useState('query');
   const [panelOpen, setPanelOpen] = useState(false);
@@ -52,15 +74,46 @@ export default function App() {
     [points, selectedId],
   );
 
+  const canAccessAdmin = useMemo(
+    () =>
+      projects.some((project) =>
+        ['SuperAdmin', 'ProjectAdmin'].includes(project.role),
+      ),
+    [projects],
+  );
+
   useEffect(() => {
+    function syncRoute() {
+      setRoute(window.location.pathname.startsWith('/admin') ? '/admin' : '/');
+    }
+    window.addEventListener('popstate', syncRoute);
+    return () => window.removeEventListener('popstate', syncRoute);
+  }, []);
+
+  function navigate(nextRoute) {
+    if (nextRoute === route) return;
+    const target = nextRoute === '/admin' ? '/admin' : '/';
+    window.history.pushState({}, '', target);
+    setRoute(target);
+  }
+
+  const refreshProjects = useCallback(async () => {
     if (!token) return;
-    getProjects(token).then((projectList) => {
-      setProjects(projectList);
-      if (projectList.length > 0) {
-        setProjectId((prev) => prev || projectList[0].id);
-      }
+    const projectList = await getProjects(token);
+    setProjects(projectList);
+    if (projectList.length === 0) {
+      setProjectId(null);
+      return;
+    }
+    setProjectId((prev) => {
+      const exists = projectList.some((project) => String(project.id) === String(prev));
+      return exists ? prev : projectList[0].id;
     });
   }, [token]);
+
+  useEffect(() => {
+    refreshProjects();
+  }, [refreshProjects]);
 
   useEffect(() => {
     if (!token || !projectId) return;
@@ -72,6 +125,14 @@ export default function App() {
       setPanelMode('query');
     });
   }, [token, projectId]);
+
+  useEffect(() => {
+    if (!selectedProject) return;
+    localStorage.setItem(
+      'omi:lastMapView',
+      JSON.stringify({ center: selectedProject.center, zoom: selectedProject.zoom }),
+    );
+  }, [selectedProject]);
 
   async function handleLogin(email, password) {
     const payload = await loginRequest(email, password);
@@ -90,6 +151,7 @@ export default function App() {
     setDraftPoint(null);
     setTool('query');
     setEditEnabled(false);
+    navigate('/');
   }
 
   function handleSelectTool(nextTool) {
@@ -115,12 +177,15 @@ export default function App() {
     );
   }
 
-  async function persist() {
-    if (!projectId) return;
+  async function persist(pointsToPersist = points) {
+    if (!projectId) return [];
+    console.info('[persist] start', { projectId, totalPoints: pointsToPersist.length });
     setSaving(true);
     try {
-      const updated = await savePoints(token, projectId, points);
+      const updated = await savePoints(token, projectId, pointsToPersist);
       setPoints(updated);
+      console.info('[persist] done', { projectId, persistedCount: updated.length });
+      return updated;
     } finally {
       setSaving(false);
     }
@@ -128,17 +193,30 @@ export default function App() {
 
   async function saveDraft() {
     if (!draftPoint) return;
+    let nextPoints = points;
     if (panelMode === 'create') {
-      setPoints((current) => [...current, { ...draftPoint, persisted: false }]);
-      setSelectedId(draftPoint.id);
+      nextPoints = [...points, { ...draftPoint, persisted: false }];
     } else if (panelMode === 'edit') {
-      updatePoint({ ...draftPoint, persisted: true });
-      setSelectedId(draftPoint.id);
+      nextPoints = points.map((point) =>
+        String(point.id) === String(draftPoint.id) ? { ...draftPoint, persisted: true } : point,
+      );
     }
-    setDraftPoint(null);
-    setPanelMode('query');
-    setTool('query');
-    await persist();
+
+    try {
+      const updated = await persist(nextPoints);
+      if (panelMode === 'create') {
+        setSelectedId(updated[0]?.id ?? null);
+      } else {
+        const stillExists = updated.some((point) => String(point.id) === String(draftPoint.id));
+        setSelectedId(stillExists ? draftPoint.id : updated[0]?.id ?? null);
+      }
+      setDraftPoint(null);
+      setPanelMode('query');
+      setTool('query');
+      setPanelOpen(true);
+    } catch (error) {
+      console.error('Error al guardar observacion', error);
+    }
   }
 
   function cancelDraft() {
@@ -156,12 +234,42 @@ export default function App() {
     return <main className="loading">Cargando proyectos...</main>;
   }
 
+  if (route === '/admin') {
+    if (!canAccessAdmin) {
+      return (
+        <main className="loading">
+          <div>
+            <p>Esta cuenta no tiene permisos de administración.</p>
+            <button type="button" onClick={() => navigate('/')}>
+              Volver al visor
+            </button>
+          </div>
+        </main>
+      );
+    }
+
+    return (
+      <AdminPage
+        token={token}
+        memberships={projects}
+        selectedProjectId={selectedProject.id}
+        onDataChanged={refreshProjects}
+        onBack={async () => {
+          await refreshProjects();
+          navigate('/');
+        }}
+      />
+    );
+  }
+
   return (
     <main className="app-shell">
       <AppHeader
         projects={projects}
         selectedProjectId={selectedProject.id}
         onProjectChange={setProjectId}
+        canAccessAdmin={canAccessAdmin}
+        onGoAdmin={() => navigate('/admin')}
         onLogout={handleLogout}
       />
 
@@ -172,9 +280,12 @@ export default function App() {
           selectedId={selectedId}
           draftPoint={draftPoint}
           mode={tool}
+          panelOpen={panelOpen}
           onMapQuery={() => {
+            setSelectedId(null);
+            setDraftPoint(null);
             setPanelMode('query');
-            setPanelOpen(true);
+            setPanelOpen(false);
           }}
           onPointQuery={(id) => {
             setSelectedId(id);
@@ -208,6 +319,9 @@ export default function App() {
               coordinates: coords,
             });
           }}
+          onViewChange={(center, zoom) => {
+            localStorage.setItem('omi:lastMapView', JSON.stringify({ center, zoom }));
+          }}
         />
 
         <RightPanel
@@ -222,8 +336,7 @@ export default function App() {
         />
 
         <FAB
-          open={fabOpen}
-          onToggleOpen={() => setFabOpen((current) => !current)}
+          panelOpen={panelOpen}
           editEnabled={editEnabled}
           onToggleEditEnabled={handleToggleEditEnabled}
           activeTool={tool}

@@ -1,0 +1,83 @@
+services:
+  db:
+    image: postgis/postgis:16-3.4
+    container_name: omi-app-db
+    environment:
+      POSTGRES_DB: omi
+      POSTGRES_USER: omi
+      POSTGRES_PASSWORD: omi
+    volumes:
+      - omi_app_db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U omi -d omi"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  geoserver:
+    image: docker.osgeo.org/geoserver:2.25.2
+    container_name: omi-app-geoserver
+    environment:
+      GEOSERVER_ADMIN_USER: admin
+      GEOSERVER_ADMIN_PASSWORD: geoserver
+    ports:
+      - "8080:8080"
+    volumes:
+      - omi_app_geoserver_data:/opt/geoserver_data/
+    depends_on:
+      db:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS http://localhost:8080/geoserver/web/ >/dev/null || exit 1"]
+      interval: 20s
+      timeout: 10s
+      retries: 15
+
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    container_name: omi-app-backend
+    environment:
+      SECRET_KEY: super-secret-key
+      ACCESS_TOKEN_EXPIRE_MINUTES: 60
+      DATABASE_URL: postgresql+psycopg://omi:omi@db:5432/omi
+      GEOSERVER_URL: http://geoserver:8080/geoserver
+      GEOSERVER_USER: admin
+      GEOSERVER_PASSWORD: geoserver
+      GEOSERVER_WORKSPACE: omi
+      GEOSERVER_DATASTORE: omi_postgis
+    depends_on:
+      db:
+        condition: service_healthy
+      geoserver:
+        condition: service_started
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "python -c \"import urllib.request; urllib.request.urlopen('http://localhost:8000/health', timeout=3).read()\" || exit 1",
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+      args:
+        VITE_API_URL: /api
+        VITE_GEOSERVER_URL: /geoserver
+    container_name: omi-app-frontend
+    ports:
+      - "8500:80"
+    depends_on:
+      backend:
+        condition: service_healthy
+      geoserver:
+        condition: service_started
+
+volumes:
+  omi_app_db_data:
+  omi_app_geoserver_data:

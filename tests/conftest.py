@@ -31,14 +31,18 @@ def client() -> TestClient:
     with Session(engine) as db:
         user = User(email="user@test.com", hashed_password=get_password_hash("test123"))
         other = User(email="other@test.com", hashed_password=get_password_hash("test123"))
+        super_admin = User(email="super@test.com", hashed_password=get_password_hash("test123"))
+        project_admin = User(email="padmin@test.com", hashed_password=get_password_hash("test123"))
         p1 = Project(name="Project 1")
         p2 = Project(name="Project 2")
-        db.add_all([user, other, p1, p2])
+        db.add_all([user, other, super_admin, project_admin, p1, p2])
         db.flush()
         db.add_all(
             [
                 UserProject(user_id=user.id, project_id=p1.id, role=ProjectRole.EDITOR),
                 UserProject(user_id=other.id, project_id=p2.id, role=ProjectRole.VIEWER),
+                UserProject(user_id=super_admin.id, project_id=p1.id, role=ProjectRole.SUPER_ADMIN),
+                UserProject(user_id=project_admin.id, project_id=p1.id, role=ProjectRole.PROJECT_ADMIN),
             ]
         )
         db.commit()
