@@ -1,0 +1,2457 @@
+{
+  "generated_by": "scripts/build_repo_graph.py",
+  "note": "Archivo generado. No editar a mano; regenerar con `python scripts/build_repo_graph.py`.",
+  "stats": {
+    "files": 76,
+    "import_edges": 104,
+    "routes": 36,
+    "tables": 19,
+    "loc": 10366
+  },
+  "layers": {
+    "backend-api": [
+      "app/api/__init__.py",
+      "app/api/deps.py",
+      "app/api/router.py"
+    ],
+    "backend-core": [
+      "app/core/__init__.py",
+      "app/core/config.py",
+      "app/core/database.py",
+      "app/core/ovi_enums.py",
+      "app/core/security.py"
+    ],
+    "backend-entrypoint": [
+      "app/main.py"
+    ],
+    "backend-models": [
+      "app/models/__init__.py",
+      "app/models/admin.py",
+      "app/models/base.py",
+      "app/models/catalogs.py",
+      "app/models/observation.py",
+      "app/models/project.py",
+      "app/models/user.py",
+      "app/models/user_project.py"
+    ],
+    "backend-routes": [
+      "app/api/routes/__init__.py",
+      "app/api/routes/admin.py",
+      "app/api/routes/auth.py",
+      "app/api/routes/observations.py",
+      "app/api/routes/projects.py"
+    ],
+    "backend-schemas": [
+      "app/schemas/__init__.py",
+      "app/schemas/admin.py",
+      "app/schemas/auth.py",
+      "app/schemas/observation.py"
+    ],
+    "frontend-components": [
+      "src/components/AdminPage.jsx",
+      "src/components/AppHeader.jsx",
+      "src/components/FAB.jsx",
+      "src/components/LoginForm.jsx",
+      "src/components/MapCard.jsx",
+      "src/components/MapControlButton.jsx",
+      "src/components/MapView.jsx",
+      "src/components/ProjectSelector.jsx",
+      "src/components/RightPanel.jsx",
+      "src/components/UserMenu.jsx"
+    ],
+    "frontend-entrypoint": [
+      "src/App.jsx",
+      "src/App.permissions.test.jsx",
+      "src/main.jsx"
+    ],
+    "frontend-lib": [
+      "src/lib/api.js",
+      "src/lib/utils.js"
+    ],
+    "frontend-styles": [
+      "src/styles/app.css",
+      "src/styles/maplibre-controls.css"
+    ],
+    "frontend-ui-kit": [
+      "src/components/ui/accordion.jsx",
+      "src/components/ui/button.jsx",
+      "src/components/ui/card.jsx",
+      "src/components/ui/input.jsx",
+      "src/components/ui/select.jsx",
+      "src/components/ui/table.jsx"
+    ],
+    "legacy-geoserver-service": [
+      "backend/app/db.py",
+      "backend/app/geoserver.py",
+      "backend/app/main.py"
+    ],
+    "migrations": [
+      "alembic/env.py",
+      "alembic/versions/20260218_0002_ovi_phase1_core.py",
+      "alembic/versions/20260218_0003_ovi_phase2_details.py",
+      "alembic/versions/20260219_0004_admin_backend.py",
+      "alembic/versions/20260219_0005_layer_style_name.py",
+      "alembic/versions/20260219_0006_project_layer_available.py",
+      "alembic/versions/20260219_0007_ovi_urbano_baldio.py",
+      "alembic/versions/20261018_0001_initial_auth_projects.py"
+    ],
+    "root": [
+      "app/__init__.py",
+      "bulk_csv_app.py",
+      "exporter.py",
+      "postcss.config.js",
+      "tailwind.config.js",
+      "vite.config.js"
+    ],
+    "scripts": [
+      "scripts/__init__.py",
+      "scripts/build_repo_graph.py",
+      "scripts/seed.py"
+    ],
+    "shared-contract": [
+      "shared/ovi_enums.json"
+    ],
+    "tests": [
+      "tests/conftest.py",
+      "tests/test_admin_permissions.py",
+      "tests/test_auth_and_isolation.py",
+      "tests/test_bulk_csv.py",
+      "tests/test_exporter.py",
+      "tests/test_observation_schema.py"
+    ]
+  },
+  "nodes": [
+    {
+      "id": "alembic/env.py",
+      "kind": "python",
+      "layer": "migrations",
+      "loc": 49,
+      "exports": [
+        "config",
+        "run_migrations_offline",
+        "run_migrations_online",
+        "target_metadata"
+      ]
+    },
+    {
+      "id": "alembic/versions/20260218_0002_ovi_phase1_core.py",
+      "kind": "python",
+      "layer": "migrations",
+      "loc": 237,
+      "exports": [
+        "downgrade",
+        "observation_status",
+        "upgrade"
+      ]
+    },
+    {
+      "id": "alembic/versions/20260218_0003_ovi_phase2_details.py",
+      "kind": "python",
+      "layer": "migrations",
+      "loc": 82,
+      "exports": [
+        "downgrade",
+        "upgrade"
+      ]
+    },
+    {
+      "id": "alembic/versions/20260219_0004_admin_backend.py",
+      "kind": "python",
+      "layer": "migrations",
+      "loc": 101,
+      "exports": [
+        "downgrade",
+        "layer_type",
+        "upgrade"
+      ]
+    },
+    {
+      "id": "alembic/versions/20260219_0005_layer_style_name.py",
+      "kind": "python",
+      "layer": "migrations",
+      "loc": 26,
+      "exports": [
+        "downgrade",
+        "upgrade"
+      ]
+    },
+    {
+      "id": "alembic/versions/20260219_0006_project_layer_available.py",
+      "kind": "python",
+      "layer": "migrations",
+      "loc": 26,
+      "exports": [
+        "downgrade",
+        "upgrade"
+      ]
+    },
+    {
+      "id": "alembic/versions/20260219_0007_ovi_urbano_baldio.py",
+      "kind": "python",
+      "layer": "migrations",
+      "loc": 50,
+      "exports": [
+        "downgrade",
+        "upgrade"
+      ]
+    },
+    {
+      "id": "alembic/versions/20261018_0001_initial_auth_projects.py",
+      "kind": "python",
+      "layer": "migrations",
+      "loc": 69,
+      "exports": [
+        "downgrade",
+        "project_role",
+        "upgrade"
+      ]
+    },
+    {
+      "id": "app/__init__.py",
+      "kind": "python",
+      "layer": "root",
+      "loc": 1,
+      "exports": []
+    },
+    {
+      "id": "app/api/__init__.py",
+      "kind": "python",
+      "layer": "backend-api",
+      "loc": 1,
+      "exports": []
+    },
+    {
+      "id": "app/api/deps.py",
+      "kind": "python",
+      "layer": "backend-api",
+      "loc": 63,
+      "exports": [
+        "get_active_project_id",
+        "get_admin_membership",
+        "get_current_user",
+        "get_project_membership",
+        "oauth2_scheme"
+      ]
+    },
+    {
+      "id": "app/api/router.py",
+      "kind": "python",
+      "layer": "backend-api",
+      "loc": 10,
+      "exports": [
+        "api_router"
+      ]
+    },
+    {
+      "id": "app/api/routes/__init__.py",
+      "kind": "python",
+      "layer": "backend-routes",
+      "loc": 4,
+      "exports": [
+        "__all__"
+      ]
+    },
+    {
+      "id": "app/api/routes/admin.py",
+      "kind": "python",
+      "layer": "backend-routes",
+      "loc": 855,
+      "exports": [
+        "_audit",
+        "_ensure_project_admin_can_manage_user",
+        "_ensure_project_scope",
+        "_extract_collection",
+        "_fetch_geoserver_json",
+        "_is_super_admin",
+        "_normalized_project_name",
+        "_project_name_exists",
+        "_to_list",
+        "_user_in_project",
+        "admin_assign_user_to_project",
+        "admin_attach_layer_to_project",
+        "admin_create_layer",
+        "admin_create_project",
+        "admin_create_user",
+        "admin_delete_layer",
+        "admin_delete_project",
+        "admin_delete_user",
+        "admin_detach_layer_from_project",
+        "admin_geoserver_layer_styles",
+        "admin_geoserver_workspace_layers",
+        "admin_geoserver_workspace_styles",
+        "admin_geoserver_workspaces",
+        "admin_list_audit_logs",
+        "admin_list_layers",
+        "admin_list_projects",
+        "admin_list_users",
+        "admin_replace_project_form_configuration",
+        "admin_unassign_user_from_project",
+        "admin_update_layer",
+        "admin_update_project",
+        "admin_update_user",
+        "router"
+      ]
+    },
+    {
+      "id": "app/api/routes/auth.py",
+      "kind": "python",
+      "layer": "backend-routes",
+      "loc": 35,
+      "exports": [
+        "login",
+        "router"
+      ]
+    },
+    {
+      "id": "app/api/routes/observations.py",
+      "kind": "python",
+      "layer": "backend-routes",
+      "loc": 487,
+      "exports": [
+        "_catalog_code_by_id",
+        "_catalog_id_by_code",
+        "_require_project_scope",
+        "_sanitize_extras",
+        "_serialize_observation",
+        "_upsert_building",
+        "_upsert_location",
+        "_upsert_ovi_urbano_baldio",
+        "_upsert_rural",
+        "create_observation",
+        "delete_observation",
+        "list_observations",
+        "router",
+        "update_observation"
+      ]
+    },
+    {
+      "id": "app/api/routes/projects.py",
+      "kind": "python",
+      "layer": "backend-routes",
+      "loc": 92,
+      "exports": [
+        "_serialize_project_summary",
+        "current_project_context",
+        "list_projects",
+        "router"
+      ]
+    },
+    {
+      "id": "app/core/__init__.py",
+      "kind": "python",
+      "layer": "backend-core",
+      "loc": 1,
+      "exports": []
+    },
+    {
+      "id": "app/core/config.py",
+      "kind": "python",
+      "layer": "backend-core",
+      "loc": 19,
+      "exports": [
+        "Settings",
+        "settings"
+      ]
+    },
+    {
+      "id": "app/core/database.py",
+      "kind": "python",
+      "layer": "backend-core",
+      "loc": 18,
+      "exports": [
+        "SessionLocal",
+        "engine",
+        "get_db"
+      ]
+    },
+    {
+      "id": "app/core/ovi_enums.py",
+      "kind": "python",
+      "layer": "backend-core",
+      "loc": 20,
+      "exports": [
+        "get_ovi_allowed_codes",
+        "get_ovi_enum_definitions"
+      ]
+    },
+    {
+      "id": "app/core/security.py",
+      "kind": "python",
+      "layer": "backend-core",
+      "loc": 33,
+      "exports": [
+        "create_access_token",
+        "decode_token",
+        "get_password_hash",
+        "pwd_context",
+        "verify_password"
+      ]
+    },
+    {
+      "id": "app/main.py",
+      "kind": "python",
+      "layer": "backend-entrypoint",
+      "loc": 39,
+      "exports": [
+        "PROJECT_ID_EXEMPT_PATHS",
+        "app",
+        "health",
+        "require_project_id"
+      ]
+    },
+    {
+      "id": "app/models/__init__.py",
+      "kind": "python",
+      "layer": "backend-models",
+      "loc": 49,
+      "exports": [
+        "__all__"
+      ]
+    },
+    {
+      "id": "app/models/admin.py",
+      "kind": "python",
+      "layer": "backend-models",
+      "loc": 85,
+      "exports": [
+        "AdminAuditLog",
+        "FormFieldDefinition",
+        "Layer",
+        "LayerType",
+        "ProjectLayer"
+      ]
+    },
+    {
+      "id": "app/models/base.py",
+      "kind": "python",
+      "layer": "backend-models",
+      "loc": 6,
+      "exports": [
+        "Base"
+      ]
+    },
+    {
+      "id": "app/models/catalogs.py",
+      "kind": "python",
+      "layer": "backend-models",
+      "loc": 71,
+      "exports": [
+        "CatalogConservationState",
+        "CatalogCurrency",
+        "CatalogDestination",
+        "CatalogLegalStatus",
+        "CatalogPropertyType",
+        "CatalogValueOrigin"
+      ]
+    },
+    {
+      "id": "app/models/observation.py",
+      "kind": "python",
+      "layer": "backend-models",
+      "loc": 242,
+      "exports": [
+        "Observation",
+        "ObservationBuilding",
+        "ObservationLocation",
+        "ObservationOviUrbanoBaldio",
+        "ObservationRural",
+        "ObservationStatus",
+        "ObservationStatusHistory"
+      ]
+    },
+    {
+      "id": "app/models/project.py",
+      "kind": "python",
+      "layer": "backend-models",
+      "loc": 22,
+      "exports": [
+        "Project"
+      ]
+    },
+    {
+      "id": "app/models/user.py",
+      "kind": "python",
+      "layer": "backend-models",
+      "loc": 16,
+      "exports": [
+        "User"
+      ]
+    },
+    {
+      "id": "app/models/user_project.py",
+      "kind": "python",
+      "layer": "backend-models",
+      "loc": 36,
+      "exports": [
+        "ProjectRole",
+        "UserProject"
+      ]
+    },
+    {
+      "id": "app/schemas/__init__.py",
+      "kind": "python",
+      "layer": "backend-schemas",
+      "loc": 43,
+      "exports": [
+        "__all__"
+      ]
+    },
+    {
+      "id": "app/schemas/admin.py",
+      "kind": "python",
+      "layer": "backend-schemas",
+      "loc": 122,
+      "exports": [
+        "AdminAuditRead",
+        "FormFieldDefinitionPayload",
+        "LayerCreate",
+        "LayerUpdate",
+        "ProjectCreate",
+        "ProjectLayerAttach",
+        "ProjectUpdate",
+        "UserCreate",
+        "UserProjectAssign",
+        "UserUpdate"
+      ]
+    },
+    {
+      "id": "app/schemas/auth.py",
+      "kind": "python",
+      "layer": "backend-schemas",
+      "loc": 23,
+      "exports": [
+        "LoginRequest",
+        "Token"
+      ]
+    },
+    {
+      "id": "app/schemas/observation.py",
+      "kind": "python",
+      "layer": "backend-schemas",
+      "loc": 241,
+      "exports": [
+        "CurrencyEnum",
+        "ObservationBase",
+        "ObservationBuildingPayload",
+        "ObservationCreate",
+        "ObservationLocationPayload",
+        "ObservationRead",
+        "ObservationRuralPayload",
+        "ObservationStatusEnum",
+        "ObservationUpdate",
+        "OviUrbanoBaldioPayload",
+        "PropertyTypeEnum"
+      ]
+    },
+    {
+      "id": "backend/app/db.py",
+      "kind": "python",
+      "layer": "legacy-geoserver-service",
+      "loc": 32,
+      "exports": [
+        "DB_CONFIG",
+        "get_conn",
+        "get_cursor"
+      ]
+    },
+    {
+      "id": "backend/app/geoserver.py",
+      "kind": "python",
+      "layer": "legacy-geoserver-service",
+      "loc": 130,
+      "exports": [
+        "GEOSERVER_DATASTORE",
+        "GEOSERVER_PASSWORD",
+        "GEOSERVER_URL",
+        "GEOSERVER_USER",
+        "GEOSERVER_WORKSPACE",
+        "POSTGRES_DB",
+        "POSTGRES_HOST",
+        "POSTGRES_PASSWORD",
+        "POSTGRES_PORT",
+        "POSTGRES_USER",
+        "_auth",
+        "_headers",
+        "_request",
+        "bootstrap_geoserver",
+        "ensure_datastore",
+        "ensure_workspace",
+        "publish_featuretype",
+        "wait_for_geoserver"
+      ]
+    },
+    {
+      "id": "backend/app/main.py",
+      "kind": "python",
+      "layer": "legacy-geoserver-service",
+      "loc": 201,
+      "exports": [
+        "BaseLayerCreate",
+        "ProjectCreate",
+        "PropertyCreate",
+        "app",
+        "create_project",
+        "create_property",
+        "ensure_project_properties_view",
+        "health",
+        "list_project_base_layers",
+        "list_projects",
+        "publish_properties_layer_for_project",
+        "register_base_layer",
+        "startup_event"
+      ]
+    },
+    {
+      "id": "bulk_csv_app.py",
+      "kind": "python",
+      "layer": "root",
+      "loc": 194,
+      "exports": [
+        "DB_PATH",
+        "OmiHandler",
+        "REQUIRED_FIELDS",
+        "download_template_csv",
+        "init_db",
+        "run_server",
+        "transactional_connection",
+        "upload_csv",
+        "validate_wgs84"
+      ]
+    },
+    {
+      "id": "exporter.py",
+      "kind": "python",
+      "layer": "root",
+      "loc": 323,
+      "exports": [
+        "PROJECT_TYPE_LABELS",
+        "ProjectExporter",
+        "ProjectRecord",
+        "STATUS_LABELS",
+        "TenantSecurityError",
+        "_gpkg_point_blob"
+      ]
+    },
+    {
+      "id": "postcss.config.js",
+      "kind": "javascript",
+      "layer": "root",
+      "loc": 7,
+      "exports": []
+    },
+    {
+      "id": "scripts/__init__.py",
+      "kind": "python",
+      "layer": "scripts",
+      "loc": 1,
+      "exports": []
+    },
+    {
+      "id": "scripts/build_repo_graph.py",
+      "kind": "python",
+      "layer": "scripts",
+      "loc": 727,
+      "exports": [
+        "ASSET_GLOBS",
+        "EXCLUDED_DIRS",
+        "GENERATED_DIR",
+        "GRAPH_LAYERS",
+        "HEADER",
+        "HTTP_METHODS",
+        "INTERNAL_PY_ROOTS",
+        "JS_EXPORT_RE",
+        "JS_IMPORT_RE",
+        "JS_SUFFIXES",
+        "LAYER_LABELS",
+        "Node",
+        "OUT_DIR",
+        "PY_SUFFIXES",
+        "ROOT",
+        "Route",
+        "Table",
+        "_collect_routes",
+        "_collect_tables",
+        "_router_declaration",
+        "analyze_js",
+        "analyze_python",
+        "build_graph",
+        "classify_layer",
+        "iter_asset_files",
+        "iter_source_files",
+        "main",
+        "mermaid_id",
+        "module_name_for",
+        "python_module_index",
+        "rel",
+        "render_api_surface",
+        "render_data_model",
+        "render_module_graph",
+        "resolve_js_import",
+        "resolve_python_import",
+        "write_outputs"
+      ]
+    },
+    {
+      "id": "scripts/seed.py",
+      "kind": "python",
+      "layer": "scripts",
+      "loc": 128,
+      "exports": [
+        "run"
+      ]
+    },
+    {
+      "id": "shared/ovi_enums.json",
+      "kind": "asset",
+      "layer": "shared-contract",
+      "loc": 58,
+      "exports": []
+    },
+    {
+      "id": "src/App.jsx",
+      "kind": "jsx",
+      "layer": "frontend-entrypoint",
+      "loc": 349,
+      "exports": [
+        "App"
+      ]
+    },
+    {
+      "id": "src/App.permissions.test.jsx",
+      "kind": "jsx",
+      "layer": "frontend-entrypoint",
+      "loc": 201,
+      "exports": []
+    },
+    {
+      "id": "src/components/AdminPage.jsx",
+      "kind": "jsx",
+      "layer": "frontend-components",
+      "loc": 1248,
+      "exports": [
+        "AdminPage"
+      ]
+    },
+    {
+      "id": "src/components/AppHeader.jsx",
+      "kind": "jsx",
+      "layer": "frontend-components",
+      "loc": 27,
+      "exports": [
+        "AppHeader"
+      ]
+    },
+    {
+      "id": "src/components/FAB.jsx",
+      "kind": "jsx",
+      "layer": "frontend-components",
+      "loc": 85,
+      "exports": [
+        "FAB"
+      ]
+    },
+    {
+      "id": "src/components/LoginForm.jsx",
+      "kind": "jsx",
+      "layer": "frontend-components",
+      "loc": 63,
+      "exports": [
+        "LoginForm"
+      ]
+    },
+    {
+      "id": "src/components/MapCard.jsx",
+      "kind": "jsx",
+      "layer": "frontend-components",
+      "loc": 9,
+      "exports": [
+        "MapCard"
+      ]
+    },
+    {
+      "id": "src/components/MapControlButton.jsx",
+      "kind": "jsx",
+      "layer": "frontend-components",
+      "loc": 17,
+      "exports": [
+        "MapControlButton"
+      ]
+    },
+    {
+      "id": "src/components/MapView.jsx",
+      "kind": "jsx",
+      "layer": "frontend-components",
+      "loc": 424,
+      "exports": [
+        "MapView"
+      ]
+    },
+    {
+      "id": "src/components/ProjectSelector.jsx",
+      "kind": "jsx",
+      "layer": "frontend-components",
+      "loc": 15,
+      "exports": [
+        "ProjectSelector"
+      ]
+    },
+    {
+      "id": "src/components/RightPanel.jsx",
+      "kind": "jsx",
+      "layer": "frontend-components",
+      "loc": 378,
+      "exports": [
+        "RightPanel"
+      ]
+    },
+    {
+      "id": "src/components/UserMenu.jsx",
+      "kind": "jsx",
+      "layer": "frontend-components",
+      "loc": 52,
+      "exports": [
+        "UserMenu"
+      ]
+    },
+    {
+      "id": "src/components/ui/accordion.jsx",
+      "kind": "jsx",
+      "layer": "frontend-ui-kit",
+      "loc": 43,
+      "exports": []
+    },
+    {
+      "id": "src/components/ui/button.jsx",
+      "kind": "jsx",
+      "layer": "frontend-ui-kit",
+      "loc": 37,
+      "exports": []
+    },
+    {
+      "id": "src/components/ui/card.jsx",
+      "kind": "jsx",
+      "layer": "frontend-ui-kit",
+      "loc": 40,
+      "exports": []
+    },
+    {
+      "id": "src/components/ui/input.jsx",
+      "kind": "jsx",
+      "layer": "frontend-ui-kit",
+      "loc": 21,
+      "exports": []
+    },
+    {
+      "id": "src/components/ui/select.jsx",
+      "kind": "jsx",
+      "layer": "frontend-ui-kit",
+      "loc": 20,
+      "exports": []
+    },
+    {
+      "id": "src/components/ui/table.jsx",
+      "kind": "jsx",
+      "layer": "frontend-ui-kit",
+      "loc": 39,
+      "exports": []
+    },
+    {
+      "id": "src/lib/api.js",
+      "kind": "javascript",
+      "layer": "frontend-lib",
+      "loc": 318,
+      "exports": [
+        "adminAssignUserProject",
+        "adminAttachLayerToProject",
+        "adminCreateLayer",
+        "adminCreateProject",
+        "adminCreateUser",
+        "adminDeleteLayer",
+        "adminDetachLayerFromProject",
+        "adminListGeoServerLayerStyles",
+        "adminListGeoServerWorkspaceLayers",
+        "adminListGeoServerWorkspaceStyles",
+        "adminListGeoServerWorkspaces",
+        "adminListLayers",
+        "adminListProjects",
+        "adminListUsers",
+        "adminReplaceFormFields",
+        "adminUnassignUserProject",
+        "adminUpdateLayer",
+        "adminUpdateProject",
+        "adminUpdateUser",
+        "getPoints",
+        "getProjects",
+        "loginRequest",
+        "savePoints"
+      ]
+    },
+    {
+      "id": "src/lib/utils.js",
+      "kind": "javascript",
+      "layer": "frontend-lib",
+      "loc": 7,
+      "exports": [
+        "cn"
+      ]
+    },
+    {
+      "id": "src/main.jsx",
+      "kind": "jsx",
+      "layer": "frontend-entrypoint",
+      "loc": 11,
+      "exports": []
+    },
+    {
+      "id": "src/styles/app.css",
+      "kind": "asset",
+      "layer": "frontend-styles",
+      "loc": 1122,
+      "exports": []
+    },
+    {
+      "id": "src/styles/maplibre-controls.css",
+      "kind": "asset",
+      "layer": "frontend-styles",
+      "loc": 43,
+      "exports": []
+    },
+    {
+      "id": "tailwind.config.js",
+      "kind": "javascript",
+      "layer": "root",
+      "loc": 41,
+      "exports": []
+    },
+    {
+      "id": "tests/conftest.py",
+      "kind": "python",
+      "layer": "tests",
+      "loc": 66,
+      "exports": [
+        "ROOT",
+        "client"
+      ]
+    },
+    {
+      "id": "tests/test_admin_permissions.py",
+      "kind": "python",
+      "layer": "tests",
+      "loc": 177,
+      "exports": [
+        "_request",
+        "db",
+        "test_admin_audit_is_saved_with_ip_and_user_agent",
+        "test_create_project_rejects_existing_name_case_insensitive",
+        "test_get_admin_membership_allows_super_and_project_admin",
+        "test_get_admin_membership_denies_non_admin",
+        "test_only_super_admin_can_create_project",
+        "test_project_admin_scope_enforced",
+        "test_project_zoom_is_normalized_from_float_in_schema"
+      ]
+    },
+    {
+      "id": "tests/test_auth_and_isolation.py",
+      "kind": "python",
+      "layer": "tests",
+      "loc": 100,
+      "exports": [
+        "db",
+        "test_access_project_allowed",
+        "test_login_success",
+        "test_project_access_denied_between_projects",
+        "test_projects_response_includes_layers_metadata_key"
+      ]
+    },
+    {
+      "id": "tests/test_bulk_csv.py",
+      "kind": "python",
+      "layer": "tests",
+      "loc": 49,
+      "exports": [
+        "count_rows",
+        "get_estado",
+        "setup_function",
+        "test_upload_csv_with_errors",
+        "test_upload_valid_csv"
+      ]
+    },
+    {
+      "id": "tests/test_exporter.py",
+      "kind": "python",
+      "layer": "tests",
+      "loc": 105,
+      "exports": [
+        "sample_records",
+        "test_csv_interpretado_convierte_catalogos",
+        "test_csv_plano_aplica_filtros_y_tenant",
+        "test_geopackage_incluye_atributos_y_geom",
+        "test_tenant_obligatorio"
+      ]
+    },
+    {
+      "id": "tests/test_observation_schema.py",
+      "kind": "python",
+      "layer": "tests",
+      "loc": 173,
+      "exports": [
+        "_build_urbano_baldio_payload",
+        "_valid_ovi_payload",
+        "test_observation_create_accepts_ovi_urbano_baldio_with_procedencia_web",
+        "test_observation_create_accepts_valid_payload",
+        "test_observation_create_rejects_building_payload_for_rural_type",
+        "test_observation_create_rejects_ovi_link_when_procedencia_campo",
+        "test_observation_create_rejects_rural_payload_for_urban_type",
+        "test_observation_create_rejects_unknown_property_type",
+        "test_observation_create_requires_currency_when_price_present",
+        "test_observation_create_requires_ovi_for_urbano_baldio",
+        "test_ovi_enums_accept_valid_and_reject_invalid",
+        "test_procedencia_conditional_rules"
+      ]
+    },
+    {
+      "id": "vite.config.js",
+      "kind": "javascript",
+      "layer": "root",
+      "loc": 11,
+      "exports": []
+    }
+  ],
+  "edges": [
+    {
+      "from": "admin_audit_logs",
+      "to": "projects",
+      "kind": "foreign_key",
+      "via": "project_id"
+    },
+    {
+      "from": "admin_audit_logs",
+      "to": "users",
+      "kind": "foreign_key",
+      "via": "actor_user_id"
+    },
+    {
+      "from": "form_field_definitions",
+      "to": "projects",
+      "kind": "foreign_key",
+      "via": "project_id"
+    },
+    {
+      "from": "observation_building",
+      "to": "catalog_conservation_state",
+      "kind": "foreign_key",
+      "via": "conservation_state_id"
+    },
+    {
+      "from": "observation_building",
+      "to": "catalog_destination",
+      "kind": "foreign_key",
+      "via": "destination_id"
+    },
+    {
+      "from": "observation_building",
+      "to": "observations",
+      "kind": "foreign_key",
+      "via": "observation_id"
+    },
+    {
+      "from": "observation_location",
+      "to": "catalog_legal_status",
+      "kind": "foreign_key",
+      "via": "legal_status_id"
+    },
+    {
+      "from": "observation_location",
+      "to": "observations",
+      "kind": "foreign_key",
+      "via": "observation_id"
+    },
+    {
+      "from": "observation_ovi_urbano_baldio",
+      "to": "observations",
+      "kind": "foreign_key",
+      "via": "observation_id"
+    },
+    {
+      "from": "observation_rural",
+      "to": "observations",
+      "kind": "foreign_key",
+      "via": "observation_id"
+    },
+    {
+      "from": "observation_status_history",
+      "to": "observations",
+      "kind": "foreign_key",
+      "via": "observation_id"
+    },
+    {
+      "from": "observation_status_history",
+      "to": "users",
+      "kind": "foreign_key",
+      "via": "changed_by"
+    },
+    {
+      "from": "observations",
+      "to": "catalog_currency",
+      "kind": "foreign_key",
+      "via": "currency_id"
+    },
+    {
+      "from": "observations",
+      "to": "catalog_property_type",
+      "kind": "foreign_key",
+      "via": "property_type_id"
+    },
+    {
+      "from": "observations",
+      "to": "catalog_value_origin",
+      "kind": "foreign_key",
+      "via": "value_origin_id"
+    },
+    {
+      "from": "observations",
+      "to": "projects",
+      "kind": "foreign_key",
+      "via": "project_id"
+    },
+    {
+      "from": "observations",
+      "to": "users",
+      "kind": "foreign_key",
+      "via": "created_by"
+    },
+    {
+      "from": "observations",
+      "to": "users",
+      "kind": "foreign_key",
+      "via": "updated_by"
+    },
+    {
+      "from": "project_layers",
+      "to": "layers",
+      "kind": "foreign_key",
+      "via": "layer_id"
+    },
+    {
+      "from": "project_layers",
+      "to": "projects",
+      "kind": "foreign_key",
+      "via": "project_id"
+    },
+    {
+      "from": "user_projects",
+      "to": "projects",
+      "kind": "foreign_key",
+      "via": "project_id"
+    },
+    {
+      "from": "user_projects",
+      "to": "users",
+      "kind": "foreign_key",
+      "via": "user_id"
+    },
+    {
+      "from": "alembic/env.py",
+      "to": "app/core/config.py",
+      "kind": "imports"
+    },
+    {
+      "from": "alembic/env.py",
+      "to": "app/models/__init__.py",
+      "kind": "imports"
+    },
+    {
+      "from": "app/api/deps.py",
+      "to": "app/core/database.py",
+      "kind": "imports"
+    },
+    {
+      "from": "app/api/deps.py",
+      "to": "app/core/security.py",
+      "kind": "imports"
+    },
+    {
+      "from": "app/api/deps.py",
+      "to": "app/models/__init__.py",
+      "kind": "imports"
+    },
+    {
+      "from": "app/api/router.py",
+      "to": "app/api/routes/__init__.py",
+      "kind": "imports"
+    },
+    {
+      "from": "app/api/routes/__init__.py",
+      "to": "app/api/routes/admin.py",
+      "kind": "imports"
+    },
+    {
+      "from": "app/api/routes/__init__.py",
+      "to": "app/api/routes/auth.py",
+      "kind": "imports"
+    },
+    {
+      "from": "app/api/routes/__init__.py",
+      "to": "app/api/routes/observations.py",
+      "kind": "imports"
+    },
+    {
+      "from": "app/api/routes/__init__.py",
+      "to": "app/api/routes/projects.py",
+      "kind": "imports"
+    },
+    {
+      "from": "app/api/routes/admin.py",
+      "to": "app/api/deps.py",
+      "kind": "imports"
+    },
+    {
+      "from": "app/api/routes/admin.py",
+      "to": "app/core/config.py",
+      "kind": "imports"
+    },
+    {
+      "from": "app/api/routes/admin.py",
+      "to": "app/core/database.py",
+      "kind": "imports"
+    },
+    {
+      "from": "app/api/routes/admin.py",
+      "to": "app/core/security.py",
+      "kind": "imports"
+    },
+    {
+      "from": "app/api/routes/admin.py",
+      "to": "app/models/__init__.py",
+      "kind": "imports"
+    },
+    {
+      "from": "app/api/routes/admin.py",
+      "to": "app/schemas/admin.py",
+      "kind": "imports"
+    },
+    {
+      "from": "app/api/routes/auth.py",
+      "to": "app/core/database.py",
+      "kind": "imports"
+    },
+    {
+      "from": "app/api/routes/auth.py",
+      "to": "app/core/security.py",
+      "kind": "imports"
+    },
+    {
+      "from": "app/api/routes/auth.py",
+      "to": "app/models/__init__.py",
+      "kind": "imports"
+    },
+    {
+      "from": "app/api/routes/auth.py",
+      "to": "app/schemas/auth.py",
+      "kind": "imports"
+    },
+    {
+      "from": "app/api/routes/observations.py",
+      "to": "app/api/deps.py",
+      "kind": "imports"
+    },
+    {
+      "from": "app/api/routes/observations.py",
+      "to": "app/core/database.py",
+      "kind": "imports"
+    },
+    {
+      "from": "app/api/routes/observations.py",
+      "to": "app/models/__init__.py",
+      "kind": "imports"
+    },
+    {
+      "from": "app/api/routes/observations.py",
+      "to": "app/schemas/observation.py",
+      "kind": "imports"
+    },
+    {
+      "from": "app/api/routes/projects.py",
+      "to": "app/api/deps.py",
+      "kind": "imports"
+    },
+    {
+      "from": "app/api/routes/projects.py",
+      "to": "app/core/database.py",
+      "kind": "imports"
+    },
+    {
+      "from": "app/api/routes/projects.py",
+      "to": "app/models/__init__.py",
+      "kind": "imports"
+    },
+    {
+      "from": "app/core/database.py",
+      "to": "app/core/config.py",
+      "kind": "imports"
+    },
+    {
+      "from": "app/core/security.py",
+      "to": "app/core/config.py",
+      "kind": "imports"
+    },
+    {
+      "from": "app/main.py",
+      "to": "app/api/router.py",
+      "kind": "imports"
+    },
+    {
+      "from": "app/main.py",
+      "to": "app/core/config.py",
+      "kind": "imports"
+    },
+    {
+      "from": "app/models/__init__.py",
+      "to": "app/models/admin.py",
+      "kind": "imports"
+    },
+    {
+      "from": "app/models/__init__.py",
+      "to": "app/models/base.py",
+      "kind": "imports"
+    },
+    {
+      "from": "app/models/__init__.py",
+      "to": "app/models/catalogs.py",
+      "kind": "imports"
+    },
+    {
+      "from": "app/models/__init__.py",
+      "to": "app/models/observation.py",
+      "kind": "imports"
+    },
+    {
+      "from": "app/models/__init__.py",
+      "to": "app/models/project.py",
+      "kind": "imports"
+    },
+    {
+      "from": "app/models/__init__.py",
+      "to": "app/models/user.py",
+      "kind": "imports"
+    },
+    {
+      "from": "app/models/__init__.py",
+      "to": "app/models/user_project.py",
+      "kind": "imports"
+    },
+    {
+      "from": "app/models/admin.py",
+      "to": "app/models/base.py",
+      "kind": "imports"
+    },
+    {
+      "from": "app/models/catalogs.py",
+      "to": "app/models/base.py",
+      "kind": "imports"
+    },
+    {
+      "from": "app/models/observation.py",
+      "to": "app/models/base.py",
+      "kind": "imports"
+    },
+    {
+      "from": "app/models/project.py",
+      "to": "app/models/base.py",
+      "kind": "imports"
+    },
+    {
+      "from": "app/models/user.py",
+      "to": "app/models/base.py",
+      "kind": "imports"
+    },
+    {
+      "from": "app/models/user_project.py",
+      "to": "app/models/base.py",
+      "kind": "imports"
+    },
+    {
+      "from": "app/schemas/__init__.py",
+      "to": "app/schemas/admin.py",
+      "kind": "imports"
+    },
+    {
+      "from": "app/schemas/__init__.py",
+      "to": "app/schemas/auth.py",
+      "kind": "imports"
+    },
+    {
+      "from": "app/schemas/__init__.py",
+      "to": "app/schemas/observation.py",
+      "kind": "imports"
+    },
+    {
+      "from": "app/schemas/admin.py",
+      "to": "app/models/user_project.py",
+      "kind": "imports"
+    },
+    {
+      "from": "app/schemas/observation.py",
+      "to": "app/core/ovi_enums.py",
+      "kind": "imports"
+    },
+    {
+      "from": "backend/app/main.py",
+      "to": "backend/app/db.py",
+      "kind": "imports"
+    },
+    {
+      "from": "backend/app/main.py",
+      "to": "backend/app/geoserver.py",
+      "kind": "imports"
+    },
+    {
+      "from": "scripts/seed.py",
+      "to": "app/core/config.py",
+      "kind": "imports"
+    },
+    {
+      "from": "scripts/seed.py",
+      "to": "app/core/security.py",
+      "kind": "imports"
+    },
+    {
+      "from": "scripts/seed.py",
+      "to": "app/models/__init__.py",
+      "kind": "imports"
+    },
+    {
+      "from": "src/App.jsx",
+      "to": "src/components/AdminPage.jsx",
+      "kind": "imports"
+    },
+    {
+      "from": "src/App.jsx",
+      "to": "src/components/AppHeader.jsx",
+      "kind": "imports"
+    },
+    {
+      "from": "src/App.jsx",
+      "to": "src/components/FAB.jsx",
+      "kind": "imports"
+    },
+    {
+      "from": "src/App.jsx",
+      "to": "src/components/LoginForm.jsx",
+      "kind": "imports"
+    },
+    {
+      "from": "src/App.jsx",
+      "to": "src/components/MapView.jsx",
+      "kind": "imports"
+    },
+    {
+      "from": "src/App.jsx",
+      "to": "src/components/RightPanel.jsx",
+      "kind": "imports"
+    },
+    {
+      "from": "src/App.jsx",
+      "to": "src/lib/api.js",
+      "kind": "imports"
+    },
+    {
+      "from": "src/App.permissions.test.jsx",
+      "to": "src/App.jsx",
+      "kind": "imports"
+    },
+    {
+      "from": "src/components/AdminPage.jsx",
+      "to": "src/components/ui/accordion.jsx",
+      "kind": "imports"
+    },
+    {
+      "from": "src/components/AdminPage.jsx",
+      "to": "src/components/ui/button.jsx",
+      "kind": "imports"
+    },
+    {
+      "from": "src/components/AdminPage.jsx",
+      "to": "src/components/ui/card.jsx",
+      "kind": "imports"
+    },
+    {
+      "from": "src/components/AdminPage.jsx",
+      "to": "src/components/ui/input.jsx",
+      "kind": "imports"
+    },
+    {
+      "from": "src/components/AdminPage.jsx",
+      "to": "src/components/ui/select.jsx",
+      "kind": "imports"
+    },
+    {
+      "from": "src/components/AdminPage.jsx",
+      "to": "src/components/ui/table.jsx",
+      "kind": "imports"
+    },
+    {
+      "from": "src/components/AppHeader.jsx",
+      "to": "src/components/ProjectSelector.jsx",
+      "kind": "imports"
+    },
+    {
+      "from": "src/components/AppHeader.jsx",
+      "to": "src/components/UserMenu.jsx",
+      "kind": "imports"
+    },
+    {
+      "from": "src/components/FAB.jsx",
+      "to": "src/components/MapControlButton.jsx",
+      "kind": "imports"
+    },
+    {
+      "from": "src/components/LoginForm.jsx",
+      "to": "src/components/ui/button.jsx",
+      "kind": "imports"
+    },
+    {
+      "from": "src/components/LoginForm.jsx",
+      "to": "src/components/ui/card.jsx",
+      "kind": "imports"
+    },
+    {
+      "from": "src/components/LoginForm.jsx",
+      "to": "src/components/ui/input.jsx",
+      "kind": "imports"
+    },
+    {
+      "from": "src/components/MapView.jsx",
+      "to": "src/components/MapCard.jsx",
+      "kind": "imports"
+    },
+    {
+      "from": "src/components/MapView.jsx",
+      "to": "src/styles/maplibre-controls.css",
+      "kind": "imports"
+    },
+    {
+      "from": "src/components/RightPanel.jsx",
+      "to": "shared/ovi_enums.json",
+      "kind": "imports"
+    },
+    {
+      "from": "src/components/RightPanel.jsx",
+      "to": "src/components/ui/button.jsx",
+      "kind": "imports"
+    },
+    {
+      "from": "src/components/RightPanel.jsx",
+      "to": "src/components/ui/input.jsx",
+      "kind": "imports"
+    },
+    {
+      "from": "src/components/RightPanel.jsx",
+      "to": "src/components/ui/select.jsx",
+      "kind": "imports"
+    },
+    {
+      "from": "src/components/ui/accordion.jsx",
+      "to": "src/lib/utils.js",
+      "kind": "imports"
+    },
+    {
+      "from": "src/components/ui/button.jsx",
+      "to": "src/lib/utils.js",
+      "kind": "imports"
+    },
+    {
+      "from": "src/components/ui/card.jsx",
+      "to": "src/lib/utils.js",
+      "kind": "imports"
+    },
+    {
+      "from": "src/components/ui/input.jsx",
+      "to": "src/lib/utils.js",
+      "kind": "imports"
+    },
+    {
+      "from": "src/components/ui/select.jsx",
+      "to": "src/lib/utils.js",
+      "kind": "imports"
+    },
+    {
+      "from": "src/components/ui/table.jsx",
+      "to": "src/lib/utils.js",
+      "kind": "imports"
+    },
+    {
+      "from": "src/main.jsx",
+      "to": "src/App.jsx",
+      "kind": "imports"
+    },
+    {
+      "from": "src/main.jsx",
+      "to": "src/styles/app.css",
+      "kind": "imports"
+    },
+    {
+      "from": "tests/conftest.py",
+      "to": "app/api/deps.py",
+      "kind": "imports"
+    },
+    {
+      "from": "tests/conftest.py",
+      "to": "app/core/security.py",
+      "kind": "imports"
+    },
+    {
+      "from": "tests/conftest.py",
+      "to": "app/main.py",
+      "kind": "imports"
+    },
+    {
+      "from": "tests/conftest.py",
+      "to": "app/models/__init__.py",
+      "kind": "imports"
+    },
+    {
+      "from": "tests/test_admin_permissions.py",
+      "to": "app/api/deps.py",
+      "kind": "imports"
+    },
+    {
+      "from": "tests/test_admin_permissions.py",
+      "to": "app/api/routes/admin.py",
+      "kind": "imports"
+    },
+    {
+      "from": "tests/test_admin_permissions.py",
+      "to": "app/core/security.py",
+      "kind": "imports"
+    },
+    {
+      "from": "tests/test_admin_permissions.py",
+      "to": "app/models/__init__.py",
+      "kind": "imports"
+    },
+    {
+      "from": "tests/test_admin_permissions.py",
+      "to": "app/schemas/admin.py",
+      "kind": "imports"
+    },
+    {
+      "from": "tests/test_auth_and_isolation.py",
+      "to": "app/api/deps.py",
+      "kind": "imports"
+    },
+    {
+      "from": "tests/test_auth_and_isolation.py",
+      "to": "app/api/routes/auth.py",
+      "kind": "imports"
+    },
+    {
+      "from": "tests/test_auth_and_isolation.py",
+      "to": "app/api/routes/projects.py",
+      "kind": "imports"
+    },
+    {
+      "from": "tests/test_auth_and_isolation.py",
+      "to": "app/core/security.py",
+      "kind": "imports"
+    },
+    {
+      "from": "tests/test_auth_and_isolation.py",
+      "to": "app/models/__init__.py",
+      "kind": "imports"
+    },
+    {
+      "from": "tests/test_auth_and_isolation.py",
+      "to": "app/schemas/auth.py",
+      "kind": "imports"
+    },
+    {
+      "from": "tests/test_observation_schema.py",
+      "to": "app/schemas/observation.py",
+      "kind": "imports"
+    }
+  ],
+  "routes": [
+    {
+      "method": "GET",
+      "path": "/admin/audit",
+      "handler": "admin_list_audit_logs",
+      "source": "app/api/routes/admin.py",
+      "tags": [
+        "admin"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/admin/geoserver/workspaces",
+      "handler": "admin_geoserver_workspaces",
+      "source": "app/api/routes/admin.py",
+      "tags": [
+        "admin"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/admin/geoserver/workspaces/{workspace}/layers",
+      "handler": "admin_geoserver_workspace_layers",
+      "source": "app/api/routes/admin.py",
+      "tags": [
+        "admin"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/admin/geoserver/workspaces/{workspace}/layers/{layer_name}/styles",
+      "handler": "admin_geoserver_layer_styles",
+      "source": "app/api/routes/admin.py",
+      "tags": [
+        "admin"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/admin/geoserver/workspaces/{workspace}/styles",
+      "handler": "admin_geoserver_workspace_styles",
+      "source": "app/api/routes/admin.py",
+      "tags": [
+        "admin"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/admin/layers",
+      "handler": "admin_list_layers",
+      "source": "app/api/routes/admin.py",
+      "tags": [
+        "admin"
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/admin/layers",
+      "handler": "admin_create_layer",
+      "source": "app/api/routes/admin.py",
+      "tags": [
+        "admin"
+      ]
+    },
+    {
+      "method": "DELETE",
+      "path": "/admin/layers/{layer_id}",
+      "handler": "admin_delete_layer",
+      "source": "app/api/routes/admin.py",
+      "tags": [
+        "admin"
+      ]
+    },
+    {
+      "method": "PUT",
+      "path": "/admin/layers/{layer_id}",
+      "handler": "admin_update_layer",
+      "source": "app/api/routes/admin.py",
+      "tags": [
+        "admin"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/admin/projects",
+      "handler": "admin_list_projects",
+      "source": "app/api/routes/admin.py",
+      "tags": [
+        "admin"
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/admin/projects",
+      "handler": "admin_create_project",
+      "source": "app/api/routes/admin.py",
+      "tags": [
+        "admin"
+      ]
+    },
+    {
+      "method": "DELETE",
+      "path": "/admin/projects/{project_id}",
+      "handler": "admin_delete_project",
+      "source": "app/api/routes/admin.py",
+      "tags": [
+        "admin"
+      ]
+    },
+    {
+      "method": "PUT",
+      "path": "/admin/projects/{project_id}",
+      "handler": "admin_update_project",
+      "source": "app/api/routes/admin.py",
+      "tags": [
+        "admin"
+      ]
+    },
+    {
+      "method": "PUT",
+      "path": "/admin/projects/{project_id}/form-fields",
+      "handler": "admin_replace_project_form_configuration",
+      "source": "app/api/routes/admin.py",
+      "tags": [
+        "admin"
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/admin/projects/{project_id}/layers",
+      "handler": "admin_attach_layer_to_project",
+      "source": "app/api/routes/admin.py",
+      "tags": [
+        "admin"
+      ]
+    },
+    {
+      "method": "DELETE",
+      "path": "/admin/projects/{project_id}/layers/{layer_id}",
+      "handler": "admin_detach_layer_from_project",
+      "source": "app/api/routes/admin.py",
+      "tags": [
+        "admin"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/admin/users",
+      "handler": "admin_list_users",
+      "source": "app/api/routes/admin.py",
+      "tags": [
+        "admin"
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/admin/users",
+      "handler": "admin_create_user",
+      "source": "app/api/routes/admin.py",
+      "tags": [
+        "admin"
+      ]
+    },
+    {
+      "method": "DELETE",
+      "path": "/admin/users/{user_id}",
+      "handler": "admin_delete_user",
+      "source": "app/api/routes/admin.py",
+      "tags": [
+        "admin"
+      ]
+    },
+    {
+      "method": "PUT",
+      "path": "/admin/users/{user_id}",
+      "handler": "admin_update_user",
+      "source": "app/api/routes/admin.py",
+      "tags": [
+        "admin"
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/admin/users/{user_id}/projects",
+      "handler": "admin_assign_user_to_project",
+      "source": "app/api/routes/admin.py",
+      "tags": [
+        "admin"
+      ]
+    },
+    {
+      "method": "DELETE",
+      "path": "/admin/users/{user_id}/projects/{project_id}",
+      "handler": "admin_unassign_user_from_project",
+      "source": "app/api/routes/admin.py",
+      "tags": [
+        "admin"
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/auth/login",
+      "handler": "login",
+      "source": "app/api/routes/auth.py",
+      "tags": [
+        "auth"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{project_id}/observations",
+      "handler": "list_observations",
+      "source": "app/api/routes/observations.py",
+      "tags": [
+        "observations"
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/projects/{project_id}/observations",
+      "handler": "create_observation",
+      "source": "app/api/routes/observations.py",
+      "tags": [
+        "observations"
+      ]
+    },
+    {
+      "method": "DELETE",
+      "path": "/projects/{project_id}/observations/{observation_id}",
+      "handler": "delete_observation",
+      "source": "app/api/routes/observations.py",
+      "tags": [
+        "observations"
+      ]
+    },
+    {
+      "method": "PATCH",
+      "path": "/projects/{project_id}/observations/{observation_id}",
+      "handler": "update_observation",
+      "source": "app/api/routes/observations.py",
+      "tags": [
+        "observations"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/projects",
+      "handler": "list_projects",
+      "source": "app/api/routes/projects.py",
+      "tags": [
+        "projects"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/projects/current",
+      "handler": "current_project_context",
+      "source": "app/api/routes/projects.py",
+      "tags": [
+        "projects"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/health",
+      "handler": "health",
+      "source": "app/main.py",
+      "tags": []
+    },
+    {
+      "method": "GET",
+      "path": "/health",
+      "handler": "health",
+      "source": "backend/app/main.py",
+      "tags": []
+    },
+    {
+      "method": "GET",
+      "path": "/projects",
+      "handler": "list_projects",
+      "source": "backend/app/main.py",
+      "tags": []
+    },
+    {
+      "method": "POST",
+      "path": "/projects",
+      "handler": "create_project",
+      "source": "backend/app/main.py",
+      "tags": []
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{project_id}/base-layers",
+      "handler": "list_project_base_layers",
+      "source": "backend/app/main.py",
+      "tags": []
+    },
+    {
+      "method": "POST",
+      "path": "/projects/{project_id}/base-layers",
+      "handler": "register_base_layer",
+      "source": "backend/app/main.py",
+      "tags": []
+    },
+    {
+      "method": "POST",
+      "path": "/properties",
+      "handler": "create_property",
+      "source": "backend/app/main.py",
+      "tags": []
+    }
+  ],
+  "tables": [
+    {
+      "name": "admin_audit_logs",
+      "model": "AdminAuditLog",
+      "source": "app/models/admin.py",
+      "columns": [
+        "id",
+        "actor_user_id",
+        "action",
+        "target_type",
+        "target_id",
+        "project_id",
+        "ip_address",
+        "user_agent",
+        "details",
+        "created_at"
+      ],
+      "primary_key": [
+        "id"
+      ],
+      "foreign_keys": [
+        {
+          "column": "actor_user_id",
+          "references": "users.id"
+        },
+        {
+          "column": "project_id",
+          "references": "projects.id"
+        }
+      ]
+    },
+    {
+      "name": "catalog_conservation_state",
+      "model": "CatalogConservationState",
+      "source": "app/models/catalogs.py",
+      "columns": [
+        "id",
+        "code",
+        "label",
+        "description",
+        "is_active",
+        "sort_order"
+      ],
+      "primary_key": [
+        "id"
+      ],
+      "foreign_keys": []
+    },
+    {
+      "name": "catalog_currency",
+      "model": "CatalogCurrency",
+      "source": "app/models/catalogs.py",
+      "columns": [
+        "id",
+        "code",
+        "label",
+        "description",
+        "is_active",
+        "sort_order"
+      ],
+      "primary_key": [
+        "id"
+      ],
+      "foreign_keys": []
+    },
+    {
+      "name": "catalog_destination",
+      "model": "CatalogDestination",
+      "source": "app/models/catalogs.py",
+      "columns": [
+        "id",
+        "code",
+        "label",
+        "description",
+        "is_active",
+        "sort_order"
+      ],
+      "primary_key": [
+        "id"
+      ],
+      "foreign_keys": []
+    },
+    {
+      "name": "catalog_legal_status",
+      "model": "CatalogLegalStatus",
+      "source": "app/models/catalogs.py",
+      "columns": [
+        "id",
+        "code",
+        "label",
+        "description",
+        "is_active",
+        "sort_order"
+      ],
+      "primary_key": [
+        "id"
+      ],
+      "foreign_keys": []
+    },
+    {
+      "name": "catalog_property_type",
+      "model": "CatalogPropertyType",
+      "source": "app/models/catalogs.py",
+      "columns": [
+        "id",
+        "code",
+        "label",
+        "description",
+        "is_active",
+        "sort_order"
+      ],
+      "primary_key": [
+        "id"
+      ],
+      "foreign_keys": []
+    },
+    {
+      "name": "catalog_value_origin",
+      "model": "CatalogValueOrigin",
+      "source": "app/models/catalogs.py",
+      "columns": [
+        "id",
+        "code",
+        "label",
+        "description",
+        "is_active",
+        "sort_order"
+      ],
+      "primary_key": [
+        "id"
+      ],
+      "foreign_keys": []
+    },
+    {
+      "name": "form_field_definitions",
+      "model": "FormFieldDefinition",
+      "source": "app/models/admin.py",
+      "columns": [
+        "id",
+        "project_id",
+        "field_key",
+        "label",
+        "field_type",
+        "required",
+        "order_index",
+        "config"
+      ],
+      "primary_key": [
+        "id"
+      ],
+      "foreign_keys": [
+        {
+          "column": "project_id",
+          "references": "projects.id"
+        }
+      ]
+    },
+    {
+      "name": "layers",
+      "model": "Layer",
+      "source": "app/models/admin.py",
+      "columns": [
+        "id",
+        "name",
+        "geoserver_workspace",
+        "geoserver_layer_name",
+        "style_name",
+        "type",
+        "default_visible",
+        "z_index"
+      ],
+      "primary_key": [
+        "id"
+      ],
+      "foreign_keys": []
+    },
+    {
+      "name": "observation_building",
+      "model": "ObservationBuilding",
+      "source": "app/models/observation.py",
+      "columns": [
+        "observation_id",
+        "built_surface_total",
+        "warehouse_surface",
+        "front_meters",
+        "conservation_state_id",
+        "destination_id",
+        "construction_category_code",
+        "bedrooms_count",
+        "bathrooms_count",
+        "garage_count",
+        "floors_count",
+        "has_pool",
+        "antiquity_year"
+      ],
+      "primary_key": [
+        "observation_id"
+      ],
+      "foreign_keys": [
+        {
+          "column": "observation_id",
+          "references": "observations.id"
+        },
+        {
+          "column": "conservation_state_id",
+          "references": "catalog_conservation_state.id"
+        },
+        {
+          "column": "destination_id",
+          "references": "catalog_destination.id"
+        }
+      ]
+    },
+    {
+      "name": "observation_location",
+      "model": "ObservationLocation",
+      "source": "app/models/observation.py",
+      "columns": [
+        "observation_id",
+        "padron",
+        "neighborhood_type_code",
+        "shape_type_code",
+        "block_position_code",
+        "legal_status_id",
+        "affectation_code"
+      ],
+      "primary_key": [
+        "observation_id"
+      ],
+      "foreign_keys": [
+        {
+          "column": "observation_id",
+          "references": "observations.id"
+        },
+        {
+          "column": "legal_status_id",
+          "references": "catalog_legal_status.id"
+        }
+      ]
+    },
+    {
+      "name": "observation_ovi_urbano_baldio",
+      "model": "ObservationOviUrbanoBaldio",
+      "source": "app/models/observation.py",
+      "columns": [
+        "observation_id",
+        "tipo_inmueble",
+        "origen_valor",
+        "superficie",
+        "uni_sup",
+        "moneda",
+        "valor_total",
+        "nomenclatura",
+        "afectacion",
+        "frente",
+        "forma",
+        "ubic_cuadra",
+        "tipo_barrio",
+        "sit_juridica",
+        "fecha_valor",
+        "procedencia",
+        "telefono",
+        "foto_fachada",
+        "foto_cartel",
+        "link"
+      ],
+      "primary_key": [
+        "observation_id"
+      ],
+      "foreign_keys": [
+        {
+          "column": "observation_id",
+          "references": "observations.id"
+        }
+      ]
+    },
+    {
+      "name": "observation_rural",
+      "model": "ObservationRural",
+      "source": "app/models/observation.py",
+      "columns": [
+        "observation_id",
+        "main_use_code",
+        "sugarcane_surface",
+        "citrus_surface",
+        "grains_surface",
+        "forest_surface",
+        "other_crops_surface",
+        "has_irrigation",
+        "irrigation_type_code",
+        "irrigated_surface",
+        "irrigation_concession_type_code",
+        "has_extraordinary_improvements",
+        "has_rural_improvements"
+      ],
+      "primary_key": [
+        "observation_id"
+      ],
+      "foreign_keys": [
+        {
+          "column": "observation_id",
+          "references": "observations.id"
+        }
+      ]
+    },
+    {
+      "name": "observation_status_history",
+      "model": "ObservationStatusHistory",
+      "source": "app/models/observation.py",
+      "columns": [
+        "id",
+        "observation_id",
+        "from_status",
+        "to_status",
+        "changed_by",
+        "reason",
+        "changed_at"
+      ],
+      "primary_key": [
+        "id"
+      ],
+      "foreign_keys": [
+        {
+          "column": "observation_id",
+          "references": "observations.id"
+        },
+        {
+          "column": "changed_by",
+          "references": "users.id"
+        }
+      ]
+    },
+    {
+      "name": "observations",
+      "model": "Observation",
+      "source": "app/models/observation.py",
+      "columns": [
+        "id",
+        "project_id",
+        "external_uuid",
+        "legacy_fid",
+        "property_type_id",
+        "value_origin_id",
+        "currency_id",
+        "market_value_total",
+        "unit_land_value",
+        "valuation_date",
+        "surface_total",
+        "surface_unit",
+        "status",
+        "is_outlier",
+        "deleted_at",
+        "created_by",
+        "updated_by",
+        "created_at",
+        "updated_at",
+        "extras"
+      ],
+      "primary_key": [
+        "id"
+      ],
+      "foreign_keys": [
+        {
+          "column": "project_id",
+          "references": "projects.id"
+        },
+        {
+          "column": "property_type_id",
+          "references": "catalog_property_type.id"
+        },
+        {
+          "column": "value_origin_id",
+          "references": "catalog_value_origin.id"
+        },
+        {
+          "column": "currency_id",
+          "references": "catalog_currency.id"
+        },
+        {
+          "column": "created_by",
+          "references": "users.id"
+        },
+        {
+          "column": "updated_by",
+          "references": "users.id"
+        }
+      ]
+    },
+    {
+      "name": "project_layers",
+      "model": "ProjectLayer",
+      "source": "app/models/admin.py",
+      "columns": [
+        "id",
+        "project_id",
+        "layer_id",
+        "available_override",
+        "visible_override",
+        "z_index_override"
+      ],
+      "primary_key": [
+        "id"
+      ],
+      "foreign_keys": [
+        {
+          "column": "project_id",
+          "references": "projects.id"
+        },
+        {
+          "column": "layer_id",
+          "references": "layers.id"
+        }
+      ]
+    },
+    {
+      "name": "projects",
+      "model": "Project",
+      "source": "app/models/project.py",
+      "columns": [
+        "id",
+        "name",
+        "description",
+        "default_center_lng",
+        "default_center_lat",
+        "default_zoom"
+      ],
+      "primary_key": [
+        "id"
+      ],
+      "foreign_keys": []
+    },
+    {
+      "name": "user_projects",
+      "model": "UserProject",
+      "source": "app/models/user_project.py",
+      "columns": [
+        "id",
+        "user_id",
+        "project_id",
+        "role"
+      ],
+      "primary_key": [
+        "id"
+      ],
+      "foreign_keys": [
+        {
+          "column": "user_id",
+          "references": "users.id"
+        },
+        {
+          "column": "project_id",
+          "references": "projects.id"
+        }
+      ]
+    },
+    {
+      "name": "users",
+      "model": "User",
+      "source": "app/models/user.py",
+      "columns": [
+        "id",
+        "email",
+        "hashed_password",
+        "is_active"
+      ],
+      "primary_key": [
+        "id"
+      ],
+      "foreign_keys": []
+    }
+  ]
+}

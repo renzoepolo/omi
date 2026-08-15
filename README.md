@@ -2,6 +2,12 @@
 
 Backend base con FastAPI + SQLAlchemy 2 + PostgreSQL/PostGIS + Alembic + JWT, con aislamiento por proyecto.
 
+## Documentación
+
+- **[`docs/architecture/`](docs/architecture/README.md)** — arquitectura completa del sistema (backend, frontend, GeoServer y despliegue) documentada como grafo navegable: mapa de servicios, flujos de request, invariantes del dominio, playbooks y un `repo-graph.json` consultable, generado desde el código con `python scripts/build_repo_graph.py`.
+- [`CLAUDE.md`](CLAUDE.md) — resumen operativo y reglas del proyecto para agentes de IA.
+- [`docs/ovi_diseno_tecnico.md`](docs/ovi_diseno_tecnico.md) — diseño técnico original del modelo OVI.
+
 ## Estructura
 
 ```text
