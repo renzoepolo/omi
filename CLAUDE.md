@@ -30,15 +30,20 @@ la lista de endpoints. **Son archivos generados: no los edites a mano.**
 ```bash
 # Backend (Python 3.11, FastAPI)
 source .venv/bin/activate
+pip install -r requirements-dev.txt  # incluye requirements.txt + ruff
 alembic upgrade head          # esquema
 python -m scripts.seed        # datos de ejemplo
 uvicorn app.main:app --reload # http://localhost:8000
-python -m pytest -q           # 36 tests, SQLite en memoria
+python -m pytest              # 47 tests, SQLite en memoria
 
 # Frontend (React 18 + Vite)
 npm run dev                   # http://localhost:5173
 npm test                      # vitest
-npm run lint
+npm run lint                  # eslint (flat config)
+npm run format                # prettier --write
+
+# Calidad: el mismo gate que corre CI, sobre lo que modificaste
+./scripts/lint_changed.sh all
 
 # Documentación
 python scripts/build_repo_graph.py          # regenerar el grafo
@@ -80,7 +85,13 @@ docker compose -f docker-compose.app.yml up --build   # visor en :8500
 
 7. **Regenerá el grafo** con `python scripts/build_repo_graph.py` cuando un
    cambio agregue, mueva o borre archivos, endpoints o tablas, y commiteá el
-   resultado junto al cambio.
+   resultado junto al cambio. El job `docs` de CI lo verifica.
+
+8. **El gate de lint es progresivo.** `./scripts/lint_changed.sh` sólo revisa lo
+   que modificaste, porque el repo arrastra deuda de estilo previa (89 hallazgos
+   de ruff, 67 de ellos líneas largas). El chequeo de *formato* se aplica
+   únicamente a archivos nuevos: no arrastres un archivo viejo entero al diff por
+   haberle tocado una línea.
 
 ## Cosas que sorprenden
 

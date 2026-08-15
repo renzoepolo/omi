@@ -10,17 +10,21 @@ cada sesión.
 ```bash
 # Backend
 python -m venv .venv && source .venv/bin/activate
-pip install -r requirements.txt
+pip install -r requirements-dev.txt   # requirements.txt + ruff + pytest-cov
 alembic upgrade head              # aplica el esquema
 python -m scripts.seed            # usuarios, proyectos y capas de ejemplo
 uvicorn app.main:app --reload     # API en http://localhost:8000
-python -m pytest -q               # 36 tests, SQLite en memoria
+python -m pytest                  # 47 tests, SQLite en memoria
 
 # Frontend
 npm install
 npm run dev                       # http://localhost:5173
 npm test                          # vitest
-npm run lint
+npm run lint                      # eslint (flat config, eslint.config.js)
+npm run format                    # prettier --write
+
+# Calidad: el mismo gate que corre CI, sobre lo que modificaste
+./scripts/lint_changed.sh all
 
 # Documentación
 python scripts/build_repo_graph.py          # regenera el grafo del repositorio
@@ -143,10 +147,11 @@ featuretypes). Cualquier funcionalidad de producto va en `app/`.
 
 ## Antes de cerrar un cambio
 
-1. `python -m pytest -q` y `npm test` en verde.
-2. `python scripts/build_repo_graph.py` si agregaste, moviste o borraste
+1. `python -m pytest` y `npm test` en verde.
+2. `./scripts/lint_changed.sh all` en verde: es exactamente lo que corre CI.
+3. `python scripts/build_repo_graph.py` si agregaste, moviste o borraste
    archivos, endpoints o tablas.
-3. Si tocaste una regla de negocio OVI, confirmá que quedó reflejada en los dos
+4. Si tocaste una regla de negocio OVI, confirmá que quedó reflejada en los dos
    lados (`app/schemas/observation.py` y `src/components/RightPanel.jsx`).
-4. Si agregaste una tabla de negocio, confirmá que tiene `project_id` y que
+5. Si agregaste una tabla de negocio, confirmá que tiene `project_id` y que
    todas sus consultas filtran por el proyecto activo.
