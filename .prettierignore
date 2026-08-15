@@ -1,0 +1,18 @@
+dist/
+node_modules/
+.venv/
+coverage/
+package-lock.json
+
+# La documentacion se escribe a mano con un wrapping elegido a proposito.
+# Prettier la reflowearia entera sin aportar nada.
+*.md
+docs/
+
+# Generados desde el codigo por scripts/build_repo_graph.py.
+docs/architecture/generated/
+docs/architecture/repo-graph.json
+
+# Infraestructura: se toca poco y reformatearla solo agrega ruido al diff.
+*.yml
+*.yaml

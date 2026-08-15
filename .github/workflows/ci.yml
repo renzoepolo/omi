@@ -1,0 +1,83 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+# Un push nuevo a la misma rama cancela la corrida anterior.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  backend:
+    name: Backend (ruff + pytest)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # El gate de lint compara contra la rama base: necesita historia.
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+
+      - name: Instalar dependencias
+        run: pip install -r requirements-dev.txt
+
+      - name: Lint de lo modificado
+        if: github.event_name == 'pull_request'
+        env:
+          BASE_REF: origin/${{ github.base_ref }}
+        run: ./scripts/lint_changed.sh py
+
+      - name: Tests
+        run: python -m pytest
+
+  frontend:
+    name: Frontend (eslint + vitest)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+
+      - name: Instalar dependencias
+        run: npm ci
+
+      # Bloqueante en todo el repo: hoy esta en cero errores y queda asi.
+      - name: Lint
+        run: npm run lint
+
+      - name: Formato de lo modificado
+        if: github.event_name == 'pull_request'
+        env:
+          BASE_REF: origin/${{ github.base_ref }}
+        run: ./scripts/lint_changed.sh js
+
+      - name: Tests
+        run: npm test
+
+  docs:
+    name: Grafo del repositorio
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      # Convierte la regla 7 del CLAUDE.md ("regenera el grafo") de buena fe en
+      # obligacion mecanica. El script usa solo la biblioteca estandar.
+      - name: Verificar que el grafo esta al dia
+        run: python scripts/build_repo_graph.py --check

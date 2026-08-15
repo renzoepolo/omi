@@ -1,0 +1,47 @@
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+extend-exclude = [
+    ".venv",
+    "node_modules",
+    "dist",
+    "__pycache__",
+    "alembic/versions",
+]
+
+[tool.ruff.lint]
+select = [
+    "E",   # pycodestyle
+    "F",   # pyflakes
+    "W",   # pycodestyle warnings
+    "I",   # isort
+    "B",   # flake8-bugbear
+    "UP",  # pyupgrade
+    "C4",  # flake8-comprehensions
+    "SIM", # flake8-simplify
+    "RUF", # reglas propias de ruff
+]
+ignore = [
+    # FastAPI declara las dependencias como valores por defecto (Depends(...)),
+    # que es exactamente lo que B008 prohibe.
+    "B008",
+]
+
+[tool.ruff.lint.isort]
+known-first-party = ["app", "backend", "scripts", "shared"]
+
+[tool.ruff.lint.per-file-ignores]
+# Los tests arman su path antes de importar la app, asi que los imports no
+# pueden ir todos arriba del archivo.
+"tests/conftest.py" = ["E402"]
+
+[tool.ruff.format]
+quote-style = "double"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+filterwarnings = [
+    # passlib importa el modulo crypt, removido en Python 3.13.
+    "ignore::DeprecationWarning:passlib",
+]
