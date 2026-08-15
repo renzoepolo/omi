@@ -3,6 +3,7 @@ import {
   adminAssignUserProject,
   adminAttachLayerToProject,
   adminCreateLayer,
+  adminCreateProject,
   adminCreateUser,
   adminDetachLayerFromProject,
   adminListGeoServerLayerStyles,
