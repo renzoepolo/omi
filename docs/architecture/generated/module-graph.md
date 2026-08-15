@@ -167,7 +167,7 @@ graph LR
 
 ### Frontend · componentes
 
-- `src/components/AdminPage.jsx` — 1248 líneas
+- `src/components/AdminPage.jsx` — 1249 líneas
 - `src/components/AppHeader.jsx` — 27 líneas
 - `src/components/FAB.jsx` — 85 líneas
 - `src/components/LoginForm.jsx` — 63 líneas
@@ -226,17 +226,19 @@ graph LR
 
 ### Tests
 
-- `tests/conftest.py` — 66 líneas
+- `tests/conftest.py` — 110 líneas
 - `tests/test_admin_permissions.py` — 177 líneas
 - `tests/test_auth_and_isolation.py` — 100 líneas
 - `tests/test_bulk_csv.py` — 49 líneas
 - `tests/test_exporter.py` — 105 líneas
 - `tests/test_observation_schema.py` — 173 líneas
+- `tests/test_observations_api.py` — 273 líneas
 
 ### Raíz
 
 - `app/__init__.py` — 1 líneas
 - `bulk_csv_app.py` — 194 líneas
+- `eslint.config.js` — 59 líneas
 - `exporter.py` — 323 líneas
 - `postcss.config.js` — 7 líneas
 - `tailwind.config.js` — 41 líneas

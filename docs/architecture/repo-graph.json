@@ -2,11 +2,11 @@
   "generated_by": "scripts/build_repo_graph.py",
   "note": "Archivo generado. No editar a mano; regenerar con `python scripts/build_repo_graph.py`.",
   "stats": {
-    "files": 76,
-    "import_edges": 104,
+    "files": 78,
+    "import_edges": 106,
     "routes": 36,
     "tables": 19,
-    "loc": 10366
+    "loc": 10743
   },
   "layers": {
     "backend-api": [
@@ -98,6 +98,7 @@
     "root": [
       "app/__init__.py",
       "bulk_csv_app.py",
+      "eslint.config.js",
       "exporter.py",
       "postcss.config.js",
       "tailwind.config.js",
@@ -117,7 +118,8 @@
       "tests/test_auth_and_isolation.py",
       "tests/test_bulk_csv.py",
       "tests/test_exporter.py",
-      "tests/test_observation_schema.py"
+      "tests/test_observation_schema.py",
+      "tests/test_observations_api.py"
     ]
   },
   "nodes": [
@@ -619,6 +621,13 @@
       ]
     },
     {
+      "id": "eslint.config.js",
+      "kind": "javascript",
+      "layer": "root",
+      "loc": 59,
+      "exports": []
+    },
+    {
       "id": "exporter.py",
       "kind": "python",
       "layer": "root",
@@ -727,7 +736,7 @@
       "id": "src/components/AdminPage.jsx",
       "kind": "jsx",
       "layer": "frontend-components",
-      "loc": 1248,
+      "loc": 1249,
       "exports": [
         "AdminPage"
       ]
@@ -927,10 +936,14 @@
       "id": "tests/conftest.py",
       "kind": "python",
       "layer": "tests",
-      "loc": 66,
+      "loc": 110,
       "exports": [
         "ROOT",
-        "client"
+        "TEST_PASSWORD",
+        "_seed",
+        "client",
+        "engine",
+        "session_factory"
       ]
     },
     {
@@ -1007,6 +1020,32 @@
         "test_observation_create_requires_ovi_for_urbano_baldio",
         "test_ovi_enums_accept_valid_and_reject_invalid",
         "test_procedencia_conditional_rules"
+      ]
+    },
+    {
+      "id": "tests/test_observations_api.py",
+      "kind": "python",
+      "layer": "tests",
+      "loc": 273,
+      "exports": [
+        "PROJECT_1",
+        "PROJECT_2",
+        "_create",
+        "_create_payload",
+        "_headers",
+        "_login",
+        "_ovi_payload",
+        "test_body_project_id_must_match_path",
+        "test_create_read_update_and_soft_delete",
+        "test_every_status_change_is_recorded_in_history",
+        "test_extras_keeps_coordinates_and_drops_name_and_description",
+        "test_non_numeric_project_header_is_rejected",
+        "test_observations_are_not_visible_across_projects",
+        "test_patch_without_status_change_does_not_add_history",
+        "test_path_project_must_match_header_scope",
+        "test_request_without_project_header_is_rejected",
+        "test_unknown_payload_field_is_rejected",
+        "test_user_cannot_scope_into_a_project_they_do_not_belong_to"
       ]
     },
     {
@@ -1668,6 +1707,16 @@
     {
       "from": "tests/test_observation_schema.py",
       "to": "app/schemas/observation.py",
+      "kind": "imports"
+    },
+    {
+      "from": "tests/test_observations_api.py",
+      "to": "app/models/__init__.py",
+      "kind": "imports"
+    },
+    {
+      "from": "tests/test_observations_api.py",
+      "to": "tests/conftest.py",
       "kind": "imports"
     }
   ],
